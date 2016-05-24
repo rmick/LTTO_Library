@@ -1,6 +1,6 @@
+
 #include <Arduino.h>
 #include "LTTO.h"
-
 
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendIR
@@ -118,7 +118,7 @@ void LTTO::PulseIR(byte _mSec)
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendTag - This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::SendLtagTag(byte teamID, byte playerID, byte tagPower)
+void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
 {
     uint16_t _fireMessage;
       
@@ -128,13 +128,13 @@ void LTTO::SendLtagTag(byte teamID, byte playerID, byte tagPower)
     _fireMessage = _fireMessage + (playerID-1);
     _fireMessage = _fireMessage << 2;
     _fireMessage = _fireMessage + (tagPower-1);
-    SendIR( 'T', _fireMessage);
+    SendIR( TAG, _fireMessage);
 }
 
 ///---------------------------------------------------------------------------------------------------------
-//    Public : SendStandardBeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
+//    Public : SendBeacon - LTAG mode (non hosted game only)  This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::SendStandardBeacon(bool TagReceived, byte teamID, byte tagPower)
+void LTTO::SendBeacon(bool TagReceived, byte teamID, byte tagPower)
 {
     uint16_t _beaconMessage;
       
@@ -145,38 +145,43 @@ void LTTO::SendStandardBeacon(bool TagReceived, byte teamID, byte tagPower)
     _beaconMessage = _beaconMessage << 2;
     _beaconMessage = _beaconMessage + (tagPower-1);
 
-    this->SendIR( 'B', _beaconMessage);
+    this->SendIR( BEACON, _beaconMessage);
 }
 
 
+///---------------------------------------------------------------------------------------------------------
+//    Public : PrintBinary - Prints out any number in Binary, including lead zeros, the size specified.
+//                           Very useful for debugging 
 
 
-void LTTO::PrintBinary(int v, int num_places)
+
+void LTTO::PrintBinary(int number, int numberOfDigits)
 {
-//#ifdef DEBUG
-  int mask=0, n;
-  for (n=1; n<=num_places; n++)
-  {
-    mask = (mask << 1) | 0x0001;
-  }
-  v = v & mask;  // truncate v to specified number of places
-  
-  while(num_places)
-  {
-    if (v & (0x0001 << (num_places-1)))
-    {
-      Serial.print(F("1"));
-    }
-    else
-    {
-      Serial.print(F("0"));
-    }
-    
-    --num_places;
-    if(((num_places%4) == 0) && (num_places != 0))
-    {
-      Serial.print(F("_"));
-    }
-  }
-//  #endif
+    #ifdef DEBUG
+        int mask = 0;
+        for (byte n = 1; n <= numberOfDigits; n++)
+        {
+            mask = (mask << 1) | 0x0001;
+        }
+        number = number & mask;  // truncate v to specified number of places
+          
+        while(numberOfDigits)
+        {
+            if (number & (0x0001 << (numberOfDigits - 1) ) )
+            {
+                Serial.print(F("1"));
+            }
+            else
+            {
+                Serial.print(F("0"));
+            }
+            
+            --numberOfDigits;
+            
+            if( ( (numberOfDigits % 4) == 0) && (numberOfDigits != 0) )
+            {
+                Serial.print(F("_"));
+            }
+        }
+    #endif
 }

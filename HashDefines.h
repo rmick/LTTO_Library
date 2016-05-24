@@ -1,18 +1,21 @@
+
 ////---------------------------------------------------------------------------------------------------------
 //    SendIR stuff
 
-#DEFINE     TAG             'T'
-#DEFINE     BEACON          'B'
-#DEFINE     PACKET          'P'
-#DEFINE     DATA            'D'
-#DEFINE     CHECKSUM        'C'
+#define     TAG             'T'
+#define     BEACON          'B'
+#define     PACKET          'P'
+#define     DATA            'D'
+#define     CHECKSUM        'C'
 
 ////---------------------------------------------------------------------------------------------------------
 //    SendBeacon Stuff
 
-#DEFINE     IFF_BEACON          'I'
-#DEFINE     HIT_RESPONSE_BEACON 'C'
-#DEFINE     MEDIC_BEACON        'M'
+#define     IFF_BEACON          '0'
+#define     HIT_RESPONSE_BEACON '1'
+#define     MEDIC_BEACON        'M'         // TODO: Do we keep this or dump it?
 
 ////---------------------------------------------------------------------------------------------------------
-//    
+// 
+
+
