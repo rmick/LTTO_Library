@@ -24,11 +24,6 @@ void setup() {
     Serial.begin(250000);                               //  Starts the Serial port for debugging
     Serial.println(F("\nHere we go boys....."));        //  A short message so that we know something is happenning
 
-    Serial.print (F("\nisrArray :"));
-    for (byte x = 0; x <= 16; x++)
-    {
-        ltto1.PrintPointer(x);
-    }
 }
 
 ////---------------------------------------------------------------------------------------------------------

@@ -69,7 +69,7 @@ void LTTO::PinChange()
     //  Look for short pulses (noise) and discard
     if (_pulseLength < 500 && _pulseLength > 0)
     {
-        //shortPulseLengthError++;
+        shortPulseLengthError++;
         #ifdef DEBUG
             digitalWrite(DE_BUG_TIMING_PIN, LOW);
         #endif
@@ -83,13 +83,31 @@ void LTTO::PinChange()
     int8_t _bitLength = (_pulseLength+500)/1000;            // Round up and divide by 1,000 to give mS
     int _pinState = digitalRead(_rxPin);                    // Check state of pin (High/Low) for mark or space.
     if (_pinState == LOW) _bitLength = 0 - _bitLength;      // Set a Mark as Positive and a Break as Negative
+
+
+
+
+
+
+// TODO: Get rid of this once it is proven.
+// DEBUG STUFF FOR LOGIC ANALYSER //                    //  This is to prove whether the correct instance of the class is receiving
+                                                        //  the IRQ instruction, by flashing it's TX pin high.
+if (countISR == 1)
+{
+    digitalWrite(_txPin,HIGH);
+    delayMicroseconds(20);
+    digitalWrite(_txPin, LOW);
+}
+
+
+
+
+
   
     ////---------------------------------------------------------------------------------------------------------
     //  Store the data to the message array
     if (countISR < ARRAY_LENGTH) 
     {
-        if (countISR == 1)  Serial.println(uint32_t(this), HEX );
-        
         if      (countISR  < 4)                   messageIR[countISR] = _bitLength;         // Store the raw +3/-6/+X data to the first bits to keep it obvious
         else if (countISR >= 4 && _bitLength > 0) messageIR[countISR] = _bitLength - 1;     // Store + data bits as 0/1 instead of the raw +1/+2 to make it simple
         else                                      messageIR[countISR] = _bitLength;         // Leave the - spaces as raw 2mS

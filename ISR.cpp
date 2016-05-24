@@ -17,11 +17,11 @@ void ISRchange()
         if (arduinoInterruptedPin == arrayIndex)
         {
             isrArray[arrayIndex]->PinChange();
-
-            Serial.print( arduinoInterruptedPin );
-            Serial.print(F("-"));
-            uint32_t cast = uint32_t(&isrArray[arrayIndex] );
-            Serial.println(cast, HEX);
+                // Debug
+                Serial.print( arduinoInterruptedPin );
+                Serial.print(F("-"));
+                uint32_t cast = uint32_t(&isrArray[arrayIndex] );
+                Serial.println(cast, HEX);
         }
     }
 }
@@ -34,17 +34,6 @@ void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance )
      enableInterrupt(interruptPin, ISRchange, CHANGE);
      isrArray[interruptPin] = lttoInstance; 
 }
-
-
-void LTTO::PrintPointer(unsigned long index)
-{
-    Serial.print(F("\nArray index pin "));
-    Serial.print(index);
-    Serial.print(F(" = \t"));
-    uint32_t cast = uint32_t(&isrArray[index] );
-    Serial.print(cast, HEX);
-}
-
 
 ////---------------------------------------------------------------------------------------------------------
 //    Timer 0 interrupt. Decrements the receiveMilliTimmer variable every 1mS.
