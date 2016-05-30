@@ -12,27 +12,28 @@ LTTO* isrArray[isrArrayLength];
 
 void ISRchange()
 {
-    for (byte arrayIndex = 0; arrayIndex <= isrArrayLength; arrayIndex++)
+    for (byte arrayIndex = 0; arrayIndex < isrArrayLength; arrayIndex++)
     {
         if (arduinoInterruptedPin == arrayIndex)
-        {
+        {   
             isrArray[arrayIndex]->PinChange();
-                // Debug
-                Serial.print( arduinoInterruptedPin );
-                Serial.print(F("-"));
-                uint32_t cast = uint32_t(&isrArray[arrayIndex] );
-                Serial.println(cast, HEX);
         }
     }
 }
 
 ////---------------------------------------------------------------------------------------------------------
-//    SetUpPinChange Interrupt is used to create an array of pointers to which LTTO instance needs to get the interrupt
+//    SetUpPinChangeInterrupt is used to create an array of pointers to LTTO instances in order for ISRchange to know which object to use.
+//      The array is indexed to Arduino pin numbers for ease of use (but is a tad wasteful of RAM).
 
 void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance )
 {
      enableInterrupt(interruptPin, ISRchange, CHANGE);
      isrArray[interruptPin] = lttoInstance; 
+     
+     //TODO Debug stuff
+//     isrArrayLookup1[interruptPin] = uint32_t(lttoInstance);
+//     isrArrayLookup2[interruptPin] = uint32_t( isrArray[interruptPin] );
+
 }
 
 ////---------------------------------------------------------------------------------------------------------
@@ -40,28 +41,37 @@ void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance )
 
 SIGNAL(TIMER0_COMPA_vect)
 {
+ 
+    ////---------------------------------------------------------------------------------------------------------
+    //  Action the 1mS timer. Look for End of Packet >6mS Break. 
+    
+    for (byte arrayIndex = 0; arrayIndex < isrArrayLength; arrayIndex++)
+    {        
+        
+        if (isrArray[arrayIndex] != 0)                  // Indicates that there is a pointer for that PIN.
+        
+        {   
+            isrArray[arrayIndex]->receiveMilliTimer--;
   
-//    ////---------------------------------------------------------------------------------------------------------
-//    //  Action the 1mS timer. Look for End of Packet >6mS Break. 
-//    ltto1.receiveMilliTimer--;
-//  
-//    if (receiveMilliTimer == 0)
-//    {
-//      #ifdef DEBUG
-//        digitalWrite(DE_BUG_TIMING_PIN, HIGH);
-//      #endif
-//      if (( decodedIRmessage.newMessage = FALSE) ) decodedIRmessage.messageOverwritten++;
-//      
-//      receiveMilliTimer = 32767;
-//      irPacketLength = countISR;
-//      countISR = 0;
-//      CreateIRmessage();
-//      #ifdef DEBUG
-//        digitalWrite(DE_BUG_TIMING_PIN, LOW);
-//      #endif
-//    }
-//
-//    ////---------------------------------------------------------------------------------------------------------
-//    //  Prevent rollover into the 0 trigger value
-//    if (receiveMilliTimer == 100) receiveMilliTimer = 32767;      // Prevents rollover into the 25mS zone
+            if (isrArray[arrayIndex]->receiveMilliTimer == 0)
+            {
+                #ifdef DEBUG
+                    digitalWrite(DE_BUG_TIMING_PIN, HIGH);
+                #endif
+                if (( isrArray[arrayIndex]->decodedIRmessage.newMessage == true) ) isrArray[arrayIndex]->decodedIRmessage.messageOverwritten++;
+            
+                isrArray[arrayIndex]->receiveMilliTimer = 32767;
+                isrArray[arrayIndex]->irPacketLength    = isrArray[arrayIndex]->countISR;
+                isrArray[arrayIndex]->countISR          = 0;
+                isrArray[arrayIndex]->CreateIRmessage();
+                #ifdef DEBUG
+                    digitalWrite(DE_BUG_TIMING_PIN, LOW);
+                #endif
+           }
+
+        ////---------------------------------------------------------------------------------------------------------
+        //  Prevent rollover into the 0 trigger value
+        if (isrArray[arrayIndex]->receiveMilliTimer == 100) isrArray[arrayIndex]->receiveMilliTimer = 32767;      // Prevents rollover into the 25mS zone
+        }
+    }
 }

@@ -11,9 +11,11 @@
 //    You can add up to 4 different instances into one sketch on a UNO, more on a MEGA
 
 LTTO ltto1(13,11);                          //  This creates an Object called ltto1 using Pin 13 to Tx and Pin 11 to Rx
-LTTO ltto2(1 ,10);                          //  This creates an Object called ltto2 using Pin 12 to Tx and Pin 15 to Rx
-LTTO ltto3(5 , 9);
+LTTO ltto2(10 ,9);                          //  This creates an Object called ltto2 using Pin 10 to Tx and Pin  9 to Rx
+LTTO ltto3( 8, 7);
 
+long int beaconCount = 1;
+long int cycleCount = 1;
 
 ////---------------------------------------------------------------------------------------------------------
 //    void setup()
@@ -23,7 +25,6 @@ void setup() {
 
     Serial.begin(250000);                               //  Starts the Serial port for debugging
     Serial.println(F("\nHere we go boys....."));        //  A short message so that we know something is happenning
-
 }
 
 ////---------------------------------------------------------------------------------------------------------
@@ -31,8 +32,151 @@ void setup() {
 
 void loop() {
     // put your main code here, to run repeatedly:
+    
+    if (ltto1.DecodeIR() )
+    {  
+        switch (ltto1.decodedIRmessage.type)
+        {
+            case 'T':
+            //ProcessRxTag(decodedIRmessage.TeamID, decodedIRmessage.PlayerID, decodedIRmessage.ShotStrength);
+              Serial.print(F("\n\Tag1 - "));
+              Serial.print(ltto1.decodedIRmessage.rawDataPacket, BIN);
+              break;
+            
+            case 'B':
+              Serial.print(F("\n\tBeacon1 - "));
+              Serial.print(ltto1.decodedIRmessage.rawDataPacket, BIN);
+              Serial.print(F(" : "));
+              Serial.print(beaconCount);
+              beaconCount++;
+              break;
+
+            case 'P':
+              Serial.print(F("\n\t\t------------------\n\t\tPacket1 - 0x"));
+              Serial.print(ltto1.decodedIRmessage.PacketByte, HEX);
+              //ProcessRxPacket();
+              break;
+
+            case 'D':
+              Serial.print(F("\n\t\t\tData1 - 0x"));
+              Serial.print(ltto1.decodedIRmessage.DataByte, HEX);
+              //ProcessRxDataByte();
+              break;
+
+            case 'C':
+              Serial.print(F("\n\t\tCheckSum1 - 0x"));
+              Serial.print(ltto1.decodedIRmessage.rawDataPacket & B11111111, HEX); 
+              //ProcessRxCheckSum();
+              break;   
+        }
+        ltto1.decodedIRmessage.newMessage = false;
+ 
+    }
+
+
+    if (ltto2.DecodeIR() )
+    {  
+        switch (ltto2.decodedIRmessage.type)
+        {
+            case 'T':
+            //ProcessRxTag(decodedIRmessage.TeamID, decodedIRmessage.PlayerID, decodedIRmessage.ShotStrength);
+              Serial.print(F("\n\Tag2 - "));
+              Serial.print(ltto2.decodedIRmessage.rawDataPacket, BIN);
+              break;
+            
+            case 'B':
+              Serial.print(F("\n\tBeacon2 - "));
+              Serial.print(ltto2.decodedIRmessage.rawDataPacket, BIN);
+              Serial.print(F(" : "));
+              Serial.print(beaconCount);
+              beaconCount++;
+              break;
+
+            case 'P':
+              Serial.print(F("\n\t\t------------------\n\t\tPacket2 - 0x"));
+              Serial.print(ltto2.decodedIRmessage.PacketByte, HEX);
+              //ProcessRxPacket();
+              break;
+
+            case 'D':
+              Serial.print(F("\n\t\t\tData2 - 0x"));
+              Serial.print(ltto2.decodedIRmessage.DataByte, HEX);
+              //ProcessRxDataByte();
+              break;
+
+            case 'C':
+              Serial.print(F("\n\t\tCheckSum2 - 0x"));
+              Serial.print(ltto2.decodedIRmessage.rawDataPacket & B11111111, HEX); 
+              //ProcessRxCheckSum();
+              break;   
+        }
+        ltto2.decodedIRmessage.newMessage = false;
+ 
+    }
+
+
+
+
+    if (ltto3.DecodeIR() )
+    {  
+        switch (ltto3.decodedIRmessage.type)
+        {
+            case 'T':
+            //ProcessRxTag(decodedIRmessage.TeamID, decodedIRmessage.PlayerID, decodedIRmessage.ShotStrength);
+              Serial.print(F("\n\Tag3 - "));
+              Serial.print(ltto3.decodedIRmessage.rawDataPacket, BIN);
+              break;
+            
+            case 'B':
+              Serial.print(F("\n\tBeacon3 - "));
+              Serial.print(ltto3.decodedIRmessage.rawDataPacket, BIN);
+              Serial.print(F(" : "));
+              Serial.print(beaconCount);
+              beaconCount++;
+              break;
+
+            case 'P':
+              Serial.print(F("\n\t\t------------------\n\t\tPacket3 - 0x"));
+              Serial.print(ltto3.decodedIRmessage.PacketByte, HEX);
+              //ProcessRxPacket();
+              break;
+
+            case 'D':
+              Serial.print(F("\n\t\t\tData3 - 0x"));
+              Serial.print(ltto3.decodedIRmessage.DataByte, HEX);
+              //ProcessRxDataByte();
+              break;
+
+            case 'C':
+              Serial.print(F("\n\t\tCheckSum3 - 0x"));
+              Serial.print(ltto3.decodedIRmessage.rawDataPacket & B11111111, HEX); 
+              //ProcessRxCheckSum();
+              break;   
+        }
+        ltto3.decodedIRmessage.newMessage = false;
+ 
+    }
+
+
+    if (Serial.available() !=0)
+    {
+        char keyIn = Serial.read();
+        switch (keyIn)
+        {
+            case 'e':
+                ltto1.GetErrorCounts();
+                break;
+        }
+    }        
+
+
+
+
+
 
     return;
+
+
     
     ltto1.SendBeacon(IFF_BEACON,1,4);                   //  Send an IFF (Identify Friend or Foe) Beacon with the TeamID = 1 and PlayerID = 4
     
