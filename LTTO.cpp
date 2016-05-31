@@ -19,6 +19,19 @@ LTTO::LTTO(byte txPin, byte rxPin)
             digitalWrite(DE_BUG_TIMING_PIN, LOW);
         #endif
 
+        receiveMilliTimer = 32767;
+        irPacketLength = 0;
+        countISR = 0;
+        
+        _byteCount =  0;
+        _CheckSumRx = 0;
+
+        _shortPulseLengthError = 0;
+        _arrayOverLengthError = 0;
+        _badMessage_CountISRshortPacket = 0;
+        _badMessage_InvalidPacketType = 0;
+        _badMessage_non3_6Header = 0;
+
         ////----------------------------------------------------------------------------------------------
         //    Set Timer0 interrupt
         //    Timer0 is used for millis(), so this routine piggybacks on that by using a mid-time interupt

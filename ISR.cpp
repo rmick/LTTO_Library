@@ -14,7 +14,7 @@ void ISRchange()
 {
     for (byte arrayIndex = 0; arrayIndex < isrArrayLength; arrayIndex++)
     {
-        if (arduinoInterruptedPin == arrayIndex)
+        if (arduinoInterruptedPin == arrayIndex && isrArray[arrayIndex] != 0)           // !=0 is to stop noise on floating pins causing false triggering.
         {   
             isrArray[arrayIndex]->PinChange();
         }
@@ -28,12 +28,7 @@ void ISRchange()
 void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance )
 {
      enableInterrupt(interruptPin, ISRchange, CHANGE);
-     isrArray[interruptPin] = lttoInstance; 
-     
-     //TODO Debug stuff
-//     isrArrayLookup1[interruptPin] = uint32_t(lttoInstance);
-//     isrArrayLookup2[interruptPin] = uint32_t( isrArray[interruptPin] );
-
+     isrArray[interruptPin] = lttoInstance;
 }
 
 ////---------------------------------------------------------------------------------------------------------

@@ -48,9 +48,9 @@ class LTTO
     //  Public member variables
 
         //ISR routine variables
-        volatile uint16_t   receiveMilliTimer = 32767;          // This is public so that Timer0 SIGNAL can change it.
-        volatile byte       irPacketLength = 0;
-        volatile byte       countISR = 0;
+        volatile uint16_t   receiveMilliTimer;          // This is public so that Timer0 SIGNAL can change it.
+        volatile byte       irPacketLength;
+        volatile byte       countISR;
 
 
         struct decodedIR
@@ -90,15 +90,15 @@ class LTTO
         //Other variables
         byte        _checkSumCalc;                  // The Checkcum data for sending Packet/Data messages.
         int8_t      _messageIR [ARRAY_LENGTH];      // Array of data bits, populated by PinChange
-        uint8_t     _byteCount =  0;                // Counter for data packet bytes to identify which is which
-        uint8_t     _CheckSumRx = 0;                // Received CheckSum (calculated)
+        uint8_t     _byteCount;                     // Counter for data packet bytes to identify which is which
+        uint8_t     _CheckSumRx;                    // Received CheckSum (calculated)
 
         // Error checking and debug counters
-        volatile byte   _shortPulseLengthError = 0;
-        volatile byte   _arrayOverLengthError = 0;
-        int             _badMessage_CountISRshortPacket = 0;
-        int             _badMessage_InvalidPacketType = 0;
-        int             _badMessage_non3_6Header = 0;
+        volatile byte   _shortPulseLengthError;
+        volatile byte   _arrayOverLengthError;
+        int             _badMessage_CountISRshortPacket;
+        int             _badMessage_InvalidPacketType;
+        int             _badMessage_non3_6Header;
         
 };
 

@@ -86,14 +86,21 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
         decodedIRmessage.newMessage = true;        
         return; 
     }       
-
-    digitalWrite(_txPin, HIGH);                     //TODO debug stuffing around
-
+    
+    #ifdef DEBUG
+        digitalWrite(DE_BUG_TIMING_PIN, HIGH);
+    #endif
+    
+    digitalWrite(_txPin, HIGH);                 //TODO Debug indicator
+    
     if (_messageIR[1] == 3 && _messageIR[2] == -6);     //  We have a good header.
     else 
     {
         decodedIRmessage.type = 'h';  
         decodedIRmessage.newMessage = true;
+        #ifdef DEBUG
+            digitalWrite(DE_BUG_TIMING_PIN, HIGH);
+        #endif
         return;
     }
   
@@ -107,7 +114,10 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     else if (irPacketLength > 12 && _messageIR[3] == 6 && irPacketLength < 15)  decodedIRmessage.type = 'B';          // Beacon - only beacons have 3/6/6 header !!
     else    {
                 decodedIRmessage.type = 'x';  
-                decodedIRmessage.newMessage = true;      
+                decodedIRmessage.newMessage = true;
+                #ifdef DEBUG
+                    digitalWrite(DE_BUG_TIMING_PIN, HIGH);
+                #endif      
                 return; 
              }
  
@@ -134,8 +144,12 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     //  Tidy up and go home
     
     decodedIRmessage.newMessage = true;                                   // Set the flag to say there is a new message to decode.
-    digitalWrite(DE_BUG_TIMING_PIN, LOW);
-    digitalWrite(_txPin, LOW);
+    
+    #ifdef DEBUG
+        digitalWrite(DE_BUG_TIMING_PIN, LOW);
+    #endif
+
+    digitalWrite(_txPin, LOW);                 //TODO Debug indicator
 }
 
 
@@ -188,7 +202,7 @@ bool LTTO::DecodeIR()
     _byteCount = 0;
     decodedIRmessage.PacketByte = decodedIRmessage.rawDataPacket & B11111111;
     _CheckSumRx = 0;
-    decodedIRmessage.CheckSumOK == false;
+    decodedIRmessage.CheckSumOK = false;
   }
 
   else if (decodedIRmessage.type == 'D')
