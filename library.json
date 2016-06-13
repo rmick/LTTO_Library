@@ -20,12 +20,12 @@
         "url": "https://github.com/rmick/LTTO_Library"
     },
 
-    "dependencies":
+    /*"dependencies":
     {
         "name": "EnableInterrupt",
         "authors":
         {}
             "Mike 'GreyGnome' Schwager",
         }
-    },
+    },*/
 }
