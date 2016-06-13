@@ -24,8 +24,8 @@
     {
         "name": "EnableInterrupt",
         "authors":
-        [
+        {}
             "Mike 'GreyGnome' Schwager",
-        ]
-    },   
+        }
+    },
 }
