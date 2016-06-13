@@ -293,17 +293,20 @@ bool LTTO::Available()
         decodedIRmessage.packetByte = decodedIRmessage.rawDataPacket & B11111111;
         _checkSumRx = 0;
         decodedIRmessage.checkSumOK = false;
+        decodedIRmessage.checkSumCalc = 0;
     }
 
     else if (decodedIRmessage.type == DATA)
     {
         _byteCount++;
         decodedIRmessage.dataByte = decodedIRmessage.rawDataPacket & B11111111;
+        decodedIRmessage.checkSumCalc = decodedIRmessage.checkSumCalc + decodedIRmessage.rawDataPacket;
     }
 
     else if (decodedIRmessage.type == CHECKSUM)
     {
         decodedIRmessage.checkSumRxByte = decodedIRmessage.rawDataPacket & B11111111;
+        if (decodedIRmessage.checkSumCalc == decodedIRmessage.checkSumRxByte) decodedIRmessage.checkSumOK = true;
     }
 
     else if (decodedIRmessage.type == 's')   _badMessage_CountISRshortPacket++;

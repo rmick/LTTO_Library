@@ -1,0 +1,31 @@
+{
+    "name": "LTTO",
+    "description": "A basic LTTO compatible Lasertag library with simultaneous Tx/Rx. Tested on Arduino Uno + Mega, may work on others.",
+    "keywords": "Lazertag Lasertag LTTO LTAR LTX ",
+    "version": "0.9.5",
+    "frameworks": "Arduino",
+    "platforms": "atmelavr",
+
+    "authors":
+    {
+        "name": "Richie (rmick) Mickan",
+        "email": "mrmick@msn.com.au",
+        "url": "https://github.com/rmick",
+        "maintainer": true
+    },
+
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/rmick/LTTO_Library"
+    },
+
+    "dependencies":
+    {
+        "name": "EnableInterrupt",
+        "authors":
+        [
+            "Mike 'GreyGnome' Schwager",
+        ]
+    },   
+}
