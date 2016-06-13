@@ -9,13 +9,13 @@
 #define     CHECKSUM        'C'
 
 ////---------------------------------------------------------------------------------------------------------
-//    SendBeacon Stuff
+//    Beacon Stuff
 
-#define     IFF_BEACON          '0'
-#define     HIT_RESPONSE_BEACON '1'
-#define     MEDIC_BEACON        'M'         // TODO: Do we keep this or dump it?
+#define     IFF_BEACON          'I'
+#define     HIT_RESPONSE_BEACON 'H'
+#define     SUPPLY_ZONE         'S'
+#define     CONTESTED_ZONE      'C'
+#define     ZONE_BEACON         'Z'
 
 ////---------------------------------------------------------------------------------------------------------
-// 
-
-
+//     X

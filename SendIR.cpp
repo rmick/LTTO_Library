@@ -15,8 +15,6 @@ void LTTO::SendIR(char type, uint16_t message)
         Serial.print(type);
         Serial.print(F(": "));
         PrintBinary(message, 10);
-        Serial.print(F(" - "));
-        Serial.print(message, HEX);
     #endif
   
     //Send Header
@@ -81,12 +79,15 @@ void LTTO::SendIR(char type, uint16_t message)
         PulseIR(bitRead(message, bitCount)+1);        // the +1 is to convert 0/1 data into 1/2mS pulses.
     }
 
-    delay(_interDelay);                                 
-  
-    #ifdef DEBUG
-        Serial.print(F("\nIR Sent! "));
-    #endif
+    delay(_interDelay);
 }
+
+
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ///---------------------------------------------------------------------------------------------------------
 //    Private : PulseIR
@@ -115,10 +116,16 @@ void LTTO::PulseIR(byte _mSec)
         
 }
 
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            
+                            
 ///---------------------------------------------------------------------------------------------------------
-//    Public : SendTag - This takes the simple data, translates it into Binary and sends it using the SendIR class
+//    Public : SendLTAG - Send an LTAG (non hosted game) tag. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
+void LTTO::SendLTAG(byte teamID, byte playerID, byte tagPower)
 {
     uint16_t _fireMessage;
       
@@ -131,57 +138,102 @@ void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
     SendIR( TAG, _fireMessage);
 }
 
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            
+                            
 ///---------------------------------------------------------------------------------------------------------
-//    Public : SendBeacon - LTAG mode (non hosted game only)  This takes the simple data, translates it into Binary and sends it using the SendIR class
+//    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::SendBeacon(bool TagReceived, byte teamID, byte tagPower)
+void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
+{
+    uint16_t _fireMessage;
+      
+    //Assemble the fireMessage
+    _fireMessage = 136;                                                // Adds 10001000 to the start of a standard tag message, to indicate it is in a hosted game,
+    _fireMessage = _fireMessage << 2;
+    _fireMessage = teamID;
+    _fireMessage = _fireMessage << 3;
+    _fireMessage = _fireMessage + (playerID-1);
+    _fireMessage = _fireMessage << 2;
+    _fireMessage = _fireMessage + (tagPower-1);
+    SendIR( TAG, _fireMessage);
+}
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            
+///---------------------------------------------------------------------------------------------------------
+//    Public : SendBeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
+
+void LTTO::SendBeacon(bool tagReceived, byte teamID, byte tagPower)
 {
     uint16_t _beaconMessage;
       
     //Assemble the fireMessage
     _beaconMessage = teamID;
     _beaconMessage = _beaconMessage << 1;
-    _beaconMessage = _beaconMessage + (TagReceived);
+    _beaconMessage = _beaconMessage + tagReceived;
     _beaconMessage = _beaconMessage << 2;
     _beaconMessage = _beaconMessage + (tagPower-1);
 
     this->SendIR( BEACON, _beaconMessage);
 }
 
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///---------------------------------------------------------------------------------------------------------
-//    Public : PrintBinary - Prints out any number in Binary, including lead zeros, the size specified.
-//                           Very useful for debugging 
+//    Public : SendZoneBeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-
-
-void LTTO::PrintBinary(int number, int numberOfDigits)
+void LTTO::SendZoneBeacon(byte zoneType, byte teamID)
 {
-    #ifdef DEBUG
-        int mask = 0;
-        for (byte n = 1; n <= numberOfDigits; n++)
-        {
-            mask = (mask << 1) | 0x0001;
-        }
-        number = number & mask;  // truncate v to specified number of places
-          
-        while(numberOfDigits)
-        {
-            if (number & (0x0001 << (numberOfDigits - 1) ) )
-            {
-                Serial.print(F("1"));
-            }
-            else
-            {
-                Serial.print(F("0"));
-            }
-            
-            --numberOfDigits;
-            
-            if( ( (numberOfDigits % 4) == 0) && (numberOfDigits != 0) )
-            {
-                Serial.print(F("_"));
-            }
-        }
-    #endif
+    uint16_t _beaconMessage;
+      
+    //Assemble the fireMessage
+    _beaconMessage = teamID;
+    _beaconMessage = _beaconMessage << 1;
+    _beaconMessage = _beaconMessage + 0;
+    _beaconMessage = _beaconMessage << 2;
+    _beaconMessage = _beaconMessage + zoneType;                   // 00-Invalid, 01-Reserved, 10-Contested Zone, 11-Supply Zone
+
+    this->SendIR( BEACON, _beaconMessage);
 }
+
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///---------------------------------------------------------------------------------------------------------
+//    Public : SendLTARbeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
+
+void LTTO::SendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID)
+{
+    uint16_t _beaconMessage;
+      
+    //Assemble the fireMessage
+    _beaconMessage = tagReceived;
+    _beaconMessage = _beaconMessage << 1;
+    _beaconMessage = _beaconMessage + shieldsActive;
+    _beaconMessage = _beaconMessage << 2;
+    _beaconMessage = _beaconMessage + tagsRemaining;                    //00-None, 01 - 1 to 25%, 10 - 25 to 50%, 11 - 51 to 100%
+    _beaconMessage = _beaconMessage << 3;
+    _beaconMessage = _beaconMessage + unKnown;
+    _beaconMessage = _beaconMessage << 2;
+    _beaconMessage = _beaconMessage + teamID;    
+
+    this->SendIR( BEACON, _beaconMessage);
+}
+
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
