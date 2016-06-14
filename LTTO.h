@@ -99,7 +99,6 @@ private:
     byte        _checkSumCalc;                  // The Checkcum data for sending Packet/Data messages.
     int8_t      _messageIR [ARRAY_LENGTH];      // Array of data bits, populated by PinChange
     uint8_t     _byteCount;                     // Counter for data packet bytes to identify which is which
-    uint8_t     _checkSumRx;                    // Received CheckSum (calculated)
 
     //Packet & Data variables
     bool _gameIDmatch;

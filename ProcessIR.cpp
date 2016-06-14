@@ -40,9 +40,30 @@ void LTTO::ProcessPacket()
 {
     _byteCount = 0;
     decodedIRmessage.packetByte = decodedIRmessage.rawDataPacket & B11111111;
-    _checkSumRx = 0;
+    //_checkSumCalc = 0;
     decodedIRmessage.checkSumOK = false;
-    decodedIRmessage.checkSumCalc = 0;
+    decodedIRmessage.checkSumCalc = decodedIRmessage.packetByte;
+
+
+    //    _checkSumRx = 0;
+    //    _checkSumRx = _checkSumRx + decodedIRmessage.packetByte;
+    //    _gameIDmatch = false;
+    //    _taggerID = 0;
+    //    _ackPlayerAssignOK = false;
+
+    switch (decodedIRmessage.packetByte)                      // Currently only implementing messages relating to Hosting - ignoring all others.
+    {
+        case REQUEST_JOIN_GAME:
+            decodedIRmessage.packetName = "RequestJoinGame";
+            Serial.print(F("\nRx'd RequestJoinGame : "));
+        break;
+
+        case ACK_PLAYER_ASSIGN:
+            decodedIRmessage.packetName = "AckPlayerAssign";
+            Serial.print(F("\nAckPlayerAssign"));
+        break;
+
+    }
 }
 
 void LTTO::ProcessDataByte()
@@ -50,10 +71,15 @@ void LTTO::ProcessDataByte()
     _byteCount++;
     decodedIRmessage.dataByte = decodedIRmessage.rawDataPacket & B11111111;
     decodedIRmessage.checkSumCalc = decodedIRmessage.checkSumCalc + decodedIRmessage.rawDataPacket;
+    //  _checkSumRx = _checkSumRx + decodedIRmessage.rawDataPacket;
+    //    if (decodedIRmessage.packetName == "RequestJoinGame")   ActionRequestJoinGameDataByte();
+    //    if (decodedIRmessage.packetName == "AckPlayerAssign")   ActionAcknowledgePlayerAssignDataByte();
 }
 
 void LTTO::ProcessCheckSum()
 {
     decodedIRmessage.checkSumRxByte = decodedIRmessage.rawDataPacket & B11111111;
     if (decodedIRmessage.checkSumCalc == decodedIRmessage.checkSumRxByte) decodedIRmessage.checkSumOK = true;
+    //if (_checkSumRx == decodedIRmessage.checkSumRxByte)  decodedIRmessage.checkSumOK = true;
+    //else                                                 decodedIRmessage.checkSumOK = false;
 }
