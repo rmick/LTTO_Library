@@ -5,18 +5,18 @@
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendIR
 
-void LTTO::SendIR(char type, uint16_t message)
+void LTTO::SendIR(char type, uint16_t message = 0)
 {
     int _msgLength = 0;
     int _interDelay = 25;
-  
+
     #ifdef DEBUG
         Serial.print(F("\nSending IR- "));
         Serial.print(type);
         Serial.print(F(": "));
         PrintBinary(message, 10);
     #endif
-  
+
     //Send Header
     switch (type)
     {
@@ -25,7 +25,7 @@ void LTTO::SendIR(char type, uint16_t message)
     // if Type = D the data byte, Header is 363, length is 8 bits
     // if Type = P then Packet,   Header is 363, length is 9 bits, first bit must be 0
     // if Type = C then CheckSum, Header is 363, length is 9 bits, first bit must be 1
-    
+
     case 'P':
         _msgLength = 9;
         _interDelay = 25;
@@ -54,7 +54,7 @@ void LTTO::SendIR(char type, uint16_t message)
         PulseIR(3);
         message = message | 256;          //  Set the required 9th MSB bit to 1 to indicate it is a checksum
         break;
-         
+
     case 'T':
         _msgLength = 7;
         _interDelay = 5;
@@ -62,7 +62,7 @@ void LTTO::SendIR(char type, uint16_t message)
         delayMicroseconds (6000);
         PulseIR(3);
         break;
-    
+
     case 'B':
         _msgLength = 5;
         _interDelay = 25;
@@ -113,22 +113,22 @@ void LTTO::PulseIR(byte _mSec)
          delayMicroseconds(_pulseLength);
          pinMode(_txPin, INPUT);
     #endif
-        
+
 }
 
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            
-                            
+
+
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendLTAG - Send an LTAG (non hosted game) tag. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
 void LTTO::SendLTAG(byte teamID, byte playerID, byte tagPower)
 {
     uint16_t _fireMessage;
-      
+
     //Assemble the fireMessage
     _fireMessage = teamID;
     _fireMessage = _fireMessage << 3;
@@ -142,15 +142,15 @@ void LTTO::SendLTAG(byte teamID, byte playerID, byte tagPower)
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            
-                            
+
+
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
 void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
 {
     uint16_t _fireMessage;
-      
+
     //Assemble the fireMessage
     _fireMessage = 136;                                                // Adds 10001000 to the start of a standard tag message, to indicate it is in a hosted game,
     _fireMessage = _fireMessage << 2;
@@ -165,14 +165,14 @@ void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            
+
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendBeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
 
 void LTTO::SendBeacon(bool tagReceived, byte teamID, byte tagPower)
 {
     uint16_t _beaconMessage;
-      
+
     //Assemble the fireMessage
     _beaconMessage = teamID;
     _beaconMessage = _beaconMessage << 1;
@@ -194,7 +194,7 @@ void LTTO::SendBeacon(bool tagReceived, byte teamID, byte tagPower)
 void LTTO::SendZoneBeacon(byte zoneType, byte teamID)
 {
     uint16_t _beaconMessage;
-      
+
     //Assemble the fireMessage
     _beaconMessage = teamID;
     _beaconMessage = _beaconMessage << 1;
@@ -217,7 +217,7 @@ void LTTO::SendZoneBeacon(byte zoneType, byte teamID)
 void LTTO::SendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID)
 {
     uint16_t _beaconMessage;
-      
+
     //Assemble the fireMessage
     _beaconMessage = tagReceived;
     _beaconMessage = _beaconMessage << 1;
@@ -227,7 +227,7 @@ void LTTO::SendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaini
     _beaconMessage = _beaconMessage << 3;
     _beaconMessage = _beaconMessage + unKnown;
     _beaconMessage = _beaconMessage << 2;
-    _beaconMessage = _beaconMessage + teamID;    
+    _beaconMessage = _beaconMessage + teamID;
 
     this->SendIR( BEACON, _beaconMessage);
 }
@@ -236,4 +236,3 @@ void LTTO::SendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaini
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-

@@ -90,10 +90,14 @@ void loop() {
                 Serial.print(ltto.GetDataByte(), HEX);
             break;
 
-            case CHECKSUM:                                              // The CheckSum byte is the 8bit sum of the Packet byte + all the data bytes
-                Serial.print(F("\n\t\tCheckSum - 0x"));
-                //Serial.print(ltto.GetRawDataPacket() & B11111111, HEX);
-                Serial.print(ltto.GetCheckSumOK() );                         // If GetCheckSumOK = 1, then checkSum is correct. If GetCheckSum = 0, there is a data error
+            case CHECKSUM:                                                          // The CheckSum byte is the 8bit sum of the Packet byte + all the data bytes
+                Serial.print(F("\n\t\tCheckSum - "));
+                if      (ltto.GetCheckSumOK() == true)  Serial.print(F("OK."));     // If GetCheckSumOK = 1 (true), then checkSum is correct.
+                else if (ltto.GetCheckSumOK() == false) Serial.print(F("BAD !"));  //  If GetCheckSumOK = 0 (false), there is a data error, and the entire message should be discarded
+            break;
+
+            case BAD_MESSAGE:
+                Serial.print(F("\n\t\t\tBad IR data"));
             break;
         }
         ltto.SetMessageProcessed();                             // SetMessageProcessed() marks the message as processed (sets Available() to false)

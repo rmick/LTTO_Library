@@ -41,23 +41,23 @@ public:
     void SendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
     bool Available();
 
-    bool GetNewMessage();
-    void SetMessageProcessed();
-    char GetMessageType();
+    bool    GetNewMessage();
+    void    SetMessageProcessed();
+    char    GetMessageType();
     unsigned int GetRawDataPacket();
-    byte GetMessageOverwrittenCount();
-    void IncrementMessageOverwrittenCount();
-    byte GetTeamID();
-    byte GetPlayerID();
-    byte GetShotStrength();
-    char GetBeaconType();
-    bool GetTagReceivedBeacon();
-    byte GetPacketByte();
-    String GetPacketName();
-    String GetDataType();
+    byte    GetMessageOverwrittenCount();
+    void    IncrementMessageOverwrittenCount();
+    byte    GetTeamID();
+    byte    GetPlayerID();
+    byte    GetShotStrength();
+    char    GetBeaconType();
+    bool    GetTagReceivedBeacon();
+    byte    GetPacketByte();
+    String  GetPacketName();
+    String  GetDataType();
     long int GetDataByte();
     uint8_t GetCheckSumRxByte();
-    bool GetCheckSumOK();
+    bool    GetCheckSumOK();
 
 
     void PrintBinary(int v, int num_places);
@@ -81,9 +81,11 @@ private:
     //  Private member functions
 
     void PulseIR(byte mSec);
-    void ProcessRxPacket();
-    void ProcessRxDataByte();
-    void ProcessRxCheckSum();
+    void ProcessTag();
+    void ProcessBeacon();
+    void ProcessPacket();
+    void ProcessDataByte();
+    void ProcessCheckSum();
 
     ////---------------------------------------------------------------------------------------------------------
     //  Private member variables
