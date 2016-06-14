@@ -29,7 +29,7 @@ void loop() {
     ltto.SendIR(DATA,   0x4C);                          // The letter 'L' in ASCII hex
     ltto.SendIR(DATA,   0x4C);                          // The letter 'L' in ASCII hex
     ltto.SendIR(DATA,   0x4F);                          // The letter 'O' in ASCII hex
-    ltto.SendIR(CHECKSUM);                              // Send a CheckSum Packet
+    ltto.SendIR(CHECKSUM, 0x00);                        // Send a CheckSum Packet - if you use 0x00 then the checksum is calculated for you.
 
     delay (10000);                                       // Wait 10 seconds and then repeat
 
