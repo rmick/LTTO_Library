@@ -1,6 +1,6 @@
 {
     "name": "LTTO",
-    "description": "A basic LTTO compatible Lasertag library with simultaneous Tx/Rx. Tested on Arduino Uno + Mega, may work on others.",
+    "description": "A basic LTTO compatible Lasertag IR library with simultaneous Tx/Rx",
     "keywords": "Lazertag Lasertag LTTO LTAR LTX ",
     "version": "1.0.0",
     "frameworks": "Arduino",
@@ -10,6 +10,4 @@
         "type": "git",
         "url": "https://github.com/rmick/LTTO_Library"
     },
-
-
 }

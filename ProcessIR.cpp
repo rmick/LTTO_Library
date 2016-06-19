@@ -38,48 +38,107 @@ void LTTO::ProcessBeacon()
 
 void LTTO::ProcessPacket()
 {
-    _byteCount = 0;
+    decodedIRmessage.byteCount = 0;
     decodedIRmessage.packetByte = decodedIRmessage.rawDataPacket & B11111111;
-    //_checkSumCalc = 0;
     decodedIRmessage.checkSumOK = false;
     decodedIRmessage.checkSumCalc = decodedIRmessage.packetByte;
 
+    //    decodedIRmessage.gameIDmatch = false;
+    //    decodedIRmessage.taggerID = 0;
+    //    decodedIRmessage.ackPlayerAssignOK = false;
 
-    //    _checkSumRx = 0;
-    //    _checkSumRx = _checkSumRx + decodedIRmessage.packetByte;
-    //    _gameIDmatch = false;
-    //    _taggerID = 0;
-    //    _ackPlayerAssignOK = false;
-
-    switch (decodedIRmessage.packetByte)                      // Currently only implementing messages relating to Hosting - ignoring all others.
+    switch (decodedIRmessage.packetByte)
     {
+        case ANNOUNCE_CUSTOM_GAME:
+            decodedIRmessage.packetName = "ANNOUNCE_CUSTOM_GAME";
+            break;
+        case ANNOUNCE_CUSTOM_GAME_2_TEAMS:
+            decodedIRmessage.packetName = "ANNOUNCE_CUSTOM_GAME_2_TEAMS";
+            break;
+        case ANNOUNCE_CUSTOM_GAME_3_TEAMS:
+            decodedIRmessage.packetName = "ANNOUNCE_CUSTOM_GAME_3_TEAMS";
+            break;
+        case ANNOUNCE_HIDE_AND_SEEK:
+            decodedIRmessage.packetName = "ANNOUNCE_HIDE_AND_SEEK";
+            break;
+        case ANNOUNCE_HUNT_THE_PREY:
+            decodedIRmessage.packetName = "ANNOUNCE_HUNT_THE_PREY";
+            break;
+        case ANOUNCE_KINGS_2_TEAMS:
+            decodedIRmessage.packetName = "ANOUNCE_KINGS_2_TEAMS";
+            break;
+        case ANOUNCE_KINGS_3_TEAMS:
+            decodedIRmessage.packetName = "ANOUNCE_KINGS_3_TEAMS";
+            break;
+        case ANNOUNCE_OWN_THE_ZONE:
+            decodedIRmessage.packetName = "ANNOUNCE_OWN_THE_ZONE";
+            break;
+        case ANNOUNCE_OWN_THE_ZONE_2_TEAMS:
+            decodedIRmessage.packetName = "ANNOUNCE_OWN_THE_ZONE_2_TEAMS";
+            break;
+        case ANNOUNCE_OWN_THE_ZONE_3_TEAMS:
+            decodedIRmessage.packetName = "ANNOUNCE_OWN_THE_ZONE_3_TEAMS";
+            break;
+        case ANNOUNCE_SPECIAL_GAME:
+            decodedIRmessage.packetName = "ANNOUNCE_SPECIAL_GAME";
+            break;
+        case ASSIGN_PLAYER_FAIL:
+            decodedIRmessage.packetName = "ASSIGN_PLAYER_FAIL";
+            break;
         case REQUEST_JOIN_GAME:
-            decodedIRmessage.packetName = "RequestJoinGame";
-            Serial.print(F("\nRx'd RequestJoinGame : "));
-        break;
-
+            decodedIRmessage.packetName = "REQUEST_JOIN_GAME";
+            break;
         case ACK_PLAYER_ASSIGN:
-            decodedIRmessage.packetName = "AckPlayerAssign";
-            Serial.print(F("\nAckPlayerAssign"));
-        break;
-
+            decodedIRmessage.packetName = "ACK_PLAYER_ASSIGN";
+            break;
+        case REQUEST_ASSISTANCE:
+            decodedIRmessage.packetName = "REQUEST_ASSISTANCE";
+            break;
+        case SEND_ASSISTANCE:
+            decodedIRmessage.packetName = "SEND_ASSISTANCE";
+            break;
+        case REQUEST_TAG_REPORT:
+            decodedIRmessage.packetName = "REQUEST_TAG_REPORT";
+            break;
+        case RANK_REPORT:
+            decodedIRmessage.packetName = "RANK_REPORT";
+            break;
+        case TAG_SUMMARY:
+            decodedIRmessage.packetName = "TAG_SUMMARY";
+            break;
+        case TEAM_1_TAG_REPORT:
+            decodedIRmessage.packetName = "TEAM_1_TAG_REPORT";
+            break;
+        case TEAM_2_TAG_REPORT:
+            decodedIRmessage.packetName = "TEAM_2_TAG_REPORT";
+            break;
+        case TEAM_3_TAG_REPORT:
+            decodedIRmessage.packetName = "TEAM_3_TAG_REPORT";
+            break;
+        case SINGLE_TAG_REPORT:
+            decodedIRmessage.packetName = "SINGLE_TAG_REPORT";
+            break;
+        case TEXT_MESSAGE:
+            decodedIRmessage.packetName = "TEXT_MESSAGE";
+            break;
+        case SPECIAL_ATTACK:
+            decodedIRmessage.packetName = "SPECIAL_ATTACK";
+            break;
     }
 }
 
 void LTTO::ProcessDataByte()
 {
-    _byteCount++;
+    decodedIRmessage.byteCount++;
     decodedIRmessage.dataByte = decodedIRmessage.rawDataPacket & B11111111;
     decodedIRmessage.checkSumCalc = decodedIRmessage.checkSumCalc + decodedIRmessage.rawDataPacket;
-    //  _checkSumRx = _checkSumRx + decodedIRmessage.rawDataPacket;
-    //    if (decodedIRmessage.packetName == "RequestJoinGame")   ActionRequestJoinGameDataByte();
-    //    if (decodedIRmessage.packetName == "AckPlayerAssign")   ActionAcknowledgePlayerAssignDataByte();
+    //    if (decodedIRmessage.packetName == "REQUEST_JOIN_GAME")   ProcessRequestJoinGameDataByte(decodedIRmessage.byteCount);
+    //    if (decodedIRmessage.packetName == "ACK_PLAYER_ASSIGN")   ProcessAckPlayerAssignDataByte(decodedIRmessage.byteCount);
 }
 
 void LTTO::ProcessCheckSum()
 {
     decodedIRmessage.checkSumRxByte = decodedIRmessage.rawDataPacket & B11111111;
     if (decodedIRmessage.checkSumCalc == decodedIRmessage.checkSumRxByte) decodedIRmessage.checkSumOK = true;
-    //if (_checkSumRx == decodedIRmessage.checkSumRxByte)  decodedIRmessage.checkSumOK = true;
-    //else                                                 decodedIRmessage.checkSumOK = false;
+    else                                                                  decodedIRmessage.checkSumOK = false;
 }

@@ -121,38 +121,14 @@ void LTTO::PulseIR(byte _mSec)
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-///---------------------------------------------------------------------------------------------------------
-//    Public : SendLTAG - Send an LTAG (non hosted game) tag. This takes the simple data, translates it into Binary and sends it using the SendIR class
-
-void LTTO::SendLTAG(byte teamID, byte playerID, byte tagPower)
-{
-    uint16_t _fireMessage;
-
-    //Assemble the fireMessage
-    _fireMessage = teamID;
-    _fireMessage = _fireMessage << 3;
-    _fireMessage = _fireMessage + (playerID-1);
-    _fireMessage = _fireMessage << 2;
-    _fireMessage = _fireMessage + (tagPower-1);
-    SendIR( TAG, _fireMessage);
-}
-
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
 void LTTO::SendTag(byte teamID, byte playerID, byte tagPower)
 {
-    uint16_t _fireMessage;
+    uint16_t _fireMessage = 0;
 
     //Assemble the fireMessage
-    _fireMessage = 136;                                                // Adds 10001000 to the start of a standard tag message, to indicate it is in a hosted game,
     _fireMessage = _fireMessage << 2;
     _fireMessage = teamID;
     _fireMessage = _fireMessage << 3;

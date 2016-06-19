@@ -39,5 +39,12 @@
 #define     ACK_PLAYER_ASSIGN               0x011
 #define     REQUEST_ASSISTANCE              0x020
 #define     SEND_ASSISTANCE                 0x021
-
+#define     REQUEST_TAG_REPORT              0x031
+#define     RANK_REPORT                     0x032
+#define     TAG_SUMMARY                     0x040
+#define     TEAM_1_TAG_REPORT               0x041
+#define     TEAM_2_TAG_REPORT               0x042
+#define     TEAM_3_TAG_REPORT               0x043
+#define     SINGLE_TAG_REPORT               0x048
 #define     TEXT_MESSAGE                    0x080
+#define     SPECIAL_ATTACK                  0x090

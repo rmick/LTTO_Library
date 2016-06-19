@@ -25,10 +25,10 @@ unsigned int LTTO::GetRawDataPacket()
     return decodedIRmessage.rawDataPacket;
 }
 
-byte LTTO::GetMessageOverwrittenCount()
-{
-    return decodedIRmessage.messageOverwrittenCount;
-}
+// byte LTTO::GetMessageOverwrittenCount()
+// {
+//     return decodedIRmessage.messageOverwrittenCount;
+// }
 
 void LTTO::IncrementMessageOverwrittenCount()
 {
@@ -53,11 +53,6 @@ byte LTTO::GetShotStrength()
 char LTTO::GetBeaconType()
 {
     return decodedIRmessage.beaconType;
-}
-
-bool LTTO::GetTagReceivedBeacon()
-{
-    return decodedIRmessage.tagReceivedBeacon;
 }
 
 byte LTTO::GetPacketByte()

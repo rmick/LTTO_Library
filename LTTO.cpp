@@ -23,7 +23,7 @@ LTTO::LTTO(byte txPin, byte rxPin)
     irPacketLength = 0;
     countISR = 0;
 
-    _byteCount =  0;
+    //_byteCount =  0;
     //_checkSumRx = 0;
 
     _shortPulseLengthError = 0;

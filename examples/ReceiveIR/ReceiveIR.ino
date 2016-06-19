@@ -83,6 +83,8 @@ void loop() {
                 Serial.print(F("\n\t\t------------------"));
                 Serial.print(F("\n\t\tPacket1 - 0x"));
                 Serial.print(ltto.GetPacketByte(), HEX);
+                Serial.print(F(" - "));
+                Serial.print(ltto.GetPacketName() );
             break;
 
             case DATA:                                                  // A Data byte contains information related to the Packet type. There are usually multiple data bytes in a message

@@ -1,0 +1,57 @@
+
+
+LTTO                KEYWORD1
+
+SendIR              KEYWORD2
+SendTag             KEYWORD2
+SendBeacon          KEYWORD2
+SendZoneBeacon      KEYWORD2
+SendLTARbeacon      KEYWORD2
+
+Available           KEYWORD2
+GetNewMessage
+SetMessageProcessed
+GetMessageType
+GetRawDataPacket
+GetMessageOverwrittenCount
+GetTeamID
+GetPlayerID
+GetShotStrength
+GetBeaconType
+GetTagReceivedBeacon
+GetPacketByte
+GetPacketName
+GetDataType
+GetDataByte
+GetCheckSumRxByte
+GetCheckSumOK
+
+
+
+byte    GetPlayerID();
+byte    GetShotStrength();
+char    GetBeaconType();
+bool    GetTagReceivedBeacon();
+byte    GetPacketByte();
+String  GetPacketName();
+String  GetDataType();
+long int GetDataByte();
+uint8_t GetCheckSumRxByte();
+bool    GetCheckSumOK();
+
+
+void PrintBinary(int v, int num_places);
+void GetErrorCounts();
+void PrintIR(char mode);
+
+
+
+
+
+
+enableInterrupt 	KEYWORD2
+disableInterrupt	KEYWORD2
+
+//  Constants (LITERAL1)
+
+PINCHANGEINTERRUPT	LITERAL1
