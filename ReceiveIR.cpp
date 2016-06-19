@@ -30,11 +30,6 @@ byte LTTO::GetMessageOverwrittenCount()
     return decodedIRmessage.messageOverwrittenCount;
 }
 
-// void LTTO::IncrementMessageOverwrittenCount()
-// {
-//     decodedIRmessage.messageOverwrittenCount++;
-// }
-
 byte LTTO::GetTeamID()
 {
     return decodedIRmessage.teamID;
@@ -86,7 +81,12 @@ bool LTTO::GetCheckSumOK()
 }
 
 ///---------------------------------------------------------------------------------------------------------
-//    Public : Pinchange - This is the ISR routine called by the EnableInterrupt library
+//    Private-Public : Required to be Public for the ISR, but not advertised - DO NOT USE OUTSIDE THE CLASS !!!!!
+
+void LTTO::IncrementMessageOverwrittenCount()
+{
+    decodedIRmessage.messageOverwrittenCount++;
+}
 
 void LTTO::PinChange()
 {
