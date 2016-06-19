@@ -116,10 +116,10 @@ private:
         byte                    playerID;                 //  Player 1 thru 8
         byte                    shotStrength;             //  Mega = 1 thru 4
         char                    beaconType;               //  '0' = IFF, '1' = TagReceived, 'Z' = ZONE,
+        bool                    tagReceivedBeacon;        //  true = Beacon sent due to Tagger being tagged (confirmation)
         byte                    packetByte;               //  The undecoded Packet number in Hex
         String                  packetName;               //  The simple name for the packet (e.g. Announce Game)  - source   wiki.lazerswarm.com
         String                  dataType;                 //  What the current DataByte contains (e.g. GameID, TaggerID, ShieldTime, PackedByte1, etc)
-
         long int                dataByte;                 //  Data Byte (in Hex)
         byte                    checkSumCalc ;            //  The calculated checkSum - each data byte adds to this value
         uint8_t                 checkSumRxByte;           //  CheckSum value (in Hex)

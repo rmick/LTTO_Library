@@ -25,15 +25,15 @@ unsigned int LTTO::GetRawDataPacket()
     return decodedIRmessage.rawDataPacket;
 }
 
-// byte LTTO::GetMessageOverwrittenCount()
-// {
-//     return decodedIRmessage.messageOverwrittenCount;
-// }
-
-void LTTO::IncrementMessageOverwrittenCount()
+byte LTTO::GetMessageOverwrittenCount()
 {
-    decodedIRmessage.messageOverwrittenCount++;
+    return decodedIRmessage.messageOverwrittenCount;
 }
+
+// void LTTO::IncrementMessageOverwrittenCount()
+// {
+//     decodedIRmessage.messageOverwrittenCount++;
+// }
 
 byte LTTO::GetTeamID()
 {
