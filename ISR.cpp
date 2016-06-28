@@ -37,25 +37,26 @@ void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance )
 
 SIGNAL(TIMER0_COMPA_vect)
 {
-    
+
     ////---------------------------------------------------------------------------------------------------------
     //  Action the 1mS timer. Look for End of Packet >6mS Break.
-    
+
     for (byte arrayIndex = 0; arrayIndex < isrArrayLength; arrayIndex++)
     {
-        
+
         if (isrArray[arrayIndex] != 0)                  // Indicates that there is a pointer for that PIN.
-            
+
         {
             isrArray[arrayIndex]->receiveMilliTimer--;
-            
+
             if (isrArray[arrayIndex]->receiveMilliTimer == 0)
             {
 #ifdef DEBUG
                 digitalWrite(DE_BUG_TIMING_PIN, HIGH);
 #endif
-                if (( isrArray[arrayIndex]->GetNewMessage() == true) ) isrArray[arrayIndex]->IncrementMessageOverwrittenCount();
-                
+                //TODO : this is no longer valid now that we have a FIFO !!!!
+                if (( isrArray[arrayIndex]->readNewMessageAvailable() == true) ) isrArray[arrayIndex]->IncrementMessageOverwrittenCount();
+
                 isrArray[arrayIndex]->receiveMilliTimer = 32767;
                 isrArray[arrayIndex]->irPacketLength    = isrArray[arrayIndex]->countISR;
                 isrArray[arrayIndex]->countISR          = 0;
@@ -64,7 +65,7 @@ SIGNAL(TIMER0_COMPA_vect)
                 digitalWrite(DE_BUG_TIMING_PIN, LOW);
 #endif
             }
-            
+
             ////---------------------------------------------------------------------------------------------------------
             //  Prevent rollover into the 0 trigger value
             if (isrArray[arrayIndex]->receiveMilliTimer == 100) isrArray[arrayIndex]->receiveMilliTimer = 32767;      // Prevents rollover into the 25mS zone

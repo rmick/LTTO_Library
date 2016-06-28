@@ -8,6 +8,9 @@
 #define     DATA            'D'
 #define     CHECKSUM        'C'
 #define     BAD_MESSAGE     'X'
+#define     SHORT_PACKET    's'
+#define     INVALID_TYPE    't'
+#define     NON_36_HEADER   'h'
 
 ////---------------------------------------------------------------------------------------------------------
 //    Beacon Stuff

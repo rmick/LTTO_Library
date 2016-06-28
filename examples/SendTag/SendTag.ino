@@ -15,20 +15,20 @@ LTTO ltto(13, 11);                          //  This creates an instance of the 
 void setup() {
 // put your setup code here, to run once:
 
-    Serial.begin(250000);                               //  Starts the Serial port for debugging
+    Serial.begin(115000);                               //  Starts the Serial port for debugging
     Serial.println(F("\nHere we go boys....."));        //  A short message so that we know something is happenning
 
 }
 
-byte teamID = 1;                                    // Create a variable called teamID, set the team # to 1
-byte playerID = 4;                                  // Create a variable called playerID, set the player # to 4
-byte shotStrength = 1;                              // Create a variable called shotStrenght, set the value to 1 (same as no-Mega)
+byte teamID = 1;                                        // Create a variable called teamID, set the team # to 1
+byte playerID = 4;                                      // Create a variable called playerID, set the player # to 4
+byte shotStrength = 1;                                  // Create a variable called shotStrenght, set the value to 1 (same as no-Mega)
 
 void loop() {
 // put your main code here, to run repeatedly:
 
-    ltto.SendTag(teamID, playerID, shotStrength);       // Send a Tag from team 1, player 4, strength 1)
+    ltto.sendTag(teamID, playerID, shotStrength);    // Send a Tag from team 1, player 4, strength 1)
 
-    delay (5000);                                       // Wait 5 seconds and then repeat
+    delay (5000);                                               // Wait 5 seconds and then repeat
 
 }

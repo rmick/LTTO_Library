@@ -33,40 +33,39 @@ public:
     //  Public member functions
 
     LTTO (byte txPin, byte rxPin);
-    void SendIR(char type, uint16_t message);
-    void SendLTAG(byte teamID, byte playerID, byte tagPower);
-    void SendTag(byte teamID, byte playerID, byte tagPower);
-    void SendBeacon(bool tagReceived, byte teamID, byte tagPower);
-    void SendZoneBeacon(byte zoneType, byte teamID);
-    void SendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
-    bool Available();
+    void        sendIR(char type, uint16_t message);
+    void        sendTag(byte teamID, byte playerID, byte tagPower);
+    void        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
+    void        sendZoneBeacon(byte zoneType, byte teamID);
+    void        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
+    bool        available();
 
-    bool    GetNewMessage();
-    void    SetMessageProcessed();
-    char    GetMessageType();
-    unsigned int GetRawDataPacket();
-    byte    GetMessageOverwrittenCount();
-    byte    GetTeamID();
-    byte    GetPlayerID();
-    byte    GetShotStrength();
-    char    GetBeaconType();
-    bool    GetTagReceivedBeacon();
-    byte    GetPacketByte();
-    String  GetPacketName();
-    String  GetDataType();
-    long int GetDataByte();
-    uint8_t GetCheckSumRxByte();
-    bool    GetCheckSumOK();
+    bool        readNewMessageAvailable();
+    void        writeMessageProcessed();
+    char        readMessageType();
+    uint16_t    readRawDataPacket();
+    byte        readMessageOverwrittenCount();
+    byte        readTeamID();
+    byte        readPlayerID();
+    byte        readShotStrength();
+    char        readBeaconType();
+    bool        readTagReceivedBeacon();
+    byte        readPacketByte();
+    String      readPacketName();
+    String      readDataType();
+    long int    readDataByte();
+    uint8_t     readCheckSumRxByte();
+    bool        readCheckSumOK();
 
 
-    void PrintBinary(int v, int num_places);
-    void GetErrorCounts();
-    void PrintIR(char mode);
+    void        printBinary(int v, int num_places);
+    void        readErrorCounts();
+    void        printIR(char mode);
 
     //Do NOT call these public functions, they are public solely to allow the ISR routines to access them
-    void PinChange(void);
-    void CreateIRmessage();
-    void IncrementMessageOverwrittenCount();
+    void        PinChange(void);
+    void        CreateIRmessage();
+    void        IncrementMessageOverwrittenCount();
 
     ////---------------------------------------------------------------------------------------------------------
     //  Public member variables
@@ -86,6 +85,8 @@ private:
     void ProcessPacket();
     void ProcessDataByte();
     void ProcessCheckSum();
+    void PushToFifo();
+    void PopFromFifo();
 
     ////---------------------------------------------------------------------------------------------------------
     //  Private member variables
@@ -108,10 +109,10 @@ private:
 
     struct irMessage
     {
-        volatile bool           newMessage;               //  true = Yes there is a new message waiting
+        //volatile bool           newMessage;               //  true = Yes there is a new message waiting
         volatile char           type;                     //  T, B, P, D, C
         volatile unsigned int   rawDataPacket;            //  The undecoded datapacket
-        volatile byte           messageOverwrittenCount;  //  This counts messages that are overwritten by a new packet before being read by the main loop 'if(DecodeIR() )' call
+        //volatile byte           messageOverwrittenCount;  //  This counts messages that are overwritten by a new packet before being read by the main loop 'if(DecodeIR() )' call
         byte                    teamID;                   //  Team 0 = No Team, then 1,2,3
         byte                    playerID;                 //  Player 1 thru 8
         byte                    shotStrength;             //  Mega = 1 thru 4
@@ -134,6 +135,19 @@ private:
 
     irMessage decodedIRmessage;
 
+    struct irRxRaw
+    {
+        volatile char           type;                     //  T, B, P, D, C
+        volatile unsigned int   rawDataPacket;            //  The undecoded datapacket
+    };
+
+    irRxRaw incomingIRmessage;
+    irRxRaw incomingIRmessageFIFO[10];
+
+    byte fifoPushPointer;
+    byte fifoPopPointer;
+    volatile byte           messageOverwrittenCount;
+    volatile bool           newMessageWaiting;
 };
 
 void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance );           // Need to pre-declare it here, otherwise the Compiler barks !

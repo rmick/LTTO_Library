@@ -32,6 +32,9 @@ LTTO::LTTO(byte txPin, byte rxPin)
     _badMessage_InvalidPacketType = 0;
     _badMessage_non3_6Header = 0;
 
+    byte fifoPushPointer = 0;
+    byte fifoPopPointer = 0;
+
     ////----------------------------------------------------------------------------------------------
     //    Set Timer0 interrupt
     //    Timer0 is used for millis(), so this routine piggybacks on that by using a mid-time interupt
@@ -55,7 +58,7 @@ LTTO::LTTO(byte txPin, byte rxPin)
 ///---------------------------------------------------------------------------------------------------------
 //    Public: This routine Serial.prints the error counts.
 
-void LTTO::GetErrorCounts()
+void LTTO::readErrorCounts()
 {
     Serial.print(F("\n----------------"));
     Serial.print(F("\nShortPulse: "));
@@ -78,7 +81,7 @@ void LTTO::GetErrorCounts()
 
 
 
-void LTTO::PrintBinary(int number, int numberOfDigits)
+void LTTO::printBinary(int number, int numberOfDigits)
 {
 #ifdef DEBUG
     int mask = 0;
