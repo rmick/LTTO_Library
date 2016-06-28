@@ -1,29 +1,29 @@
 
 LTTO                    KEYWORD1
 
-SendIR                      KEYWORD2
-SendTag                     KEYWORD2
-SendBeacon                  KEYWORD2
-SendZoneBeacon              KEYWORD2
-SendLTARbeacon              KEYWORD2
+sendIR                      KEYWORD2
+sendTag                     KEYWORD2
+sendBeacon                  KEYWORD2
+sendZoneBeacon              KEYWORD2
+sendLTARbeacon              KEYWORD2
 
-Available                   KEYWORD2
-GetNewMessage               KEYWORD2
-SetMessageProcessed         KEYWORD2
-GetMessageType              KEYWORD2
-GetRawDataPacket            KEYWORD2
-GetMessageOverwrittenCount  KEYWORD2
-GetTeamID                   KEYWORD2
-GetPlayerID                 KEYWORD2
-GetShotStrength             KEYWORD2
-GetBeaconType               KEYWORD2
-GetPacketByte               KEYWORD2
-GetPacketName               KEYWORD2
-GetDataType                 KEYWORD2
-GetDataByte                 KEYWORD2
-GetCheckSumRxByte           KEYWORD2
-GetCheckSumOK               KEYWORD2
+available                   KEYWORD2
+readNewMessage              KEYWORD2
+writeMessageProcessed       KEYWORD2
+readMessageType             KEYWORD2
+readRawDataPacket           KEYWORD2
+readMessageOverwrittenCount KEYWORD2
+readTeamID                  KEYWORD2
+readPlayerID                KEYWORD2
+readShotStrength            KEYWORD2
+readBeaconType              KEYWORD2
+readPacketByte              KEYWORD2
+readPacketName              KEYWORD2
+readDataType                KEYWORD2
+readDataByte                KEYWORD2
+readCheckSumRxByte          KEYWORD2
+readCheckSumOK              KEYWORD2
 
-PrintBinary                 KEYWORD2
-GetErrorCounts              KEYWORD2
-PrintIR                     KEYWORD2
+printBinary                 KEYWORD2
+readErrorCounts             KEYWORD2
+printIR                     KEYWORD2
