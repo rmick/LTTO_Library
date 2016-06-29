@@ -14,7 +14,7 @@ void LTTO::sendIR(char type, uint16_t message)
         Serial.print(F("\nSending IR- "));
         Serial.print(type);
         Serial.print(F(": "));
-        printBinary(message, 10);
+        printBinary(message, 8);
     #endif
 
     //Send Header
@@ -127,6 +127,8 @@ void LTTO::PulseIR(byte _mSec)
 void LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
 {
     uint16_t _fireMessage = 0;
+
+    if (playerID == 0) playerID = 1;                    //Trap in case they use PlayerID 0 !!!!
 
     //Assemble the fireMessage
     _fireMessage = _fireMessage << 2;

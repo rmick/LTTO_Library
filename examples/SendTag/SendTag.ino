@@ -20,9 +20,9 @@ void setup() {
 
 }
 
-byte teamID = 1;                                        // Create a variable called teamID, set the team # to 1
-byte playerID = 4;                                      // Create a variable called playerID, set the player # to 4
-byte shotStrength = 1;                                  // Create a variable called shotStrenght, set the value to 1 (same as no-Mega)
+byte teamID = 0;                                        // Create a variable called teamID, set the team # to 0 for LTAG games or 1,2,3 for hosted games
+byte playerID = 4;                                      // Create a variable called playerID, set the player # to a value between 1 and 8
+byte shotStrength = 1;                                  // Create a variable called shotStrenght, set the value to 1,2,3,4 (1 = no-Mega)
 
 void loop() {
 // put your main code here, to run repeatedly:
