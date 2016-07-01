@@ -102,13 +102,13 @@ void loop() {
                 Serial.print(F("\n\t\t\tBad IR data"));
             break;
         }
-        //ltto.writeMessageProcessed();                               // writeMessageProcessed() marks the message as processed (sets available() to false)
 
-        if(ltto.readMessageOverwrittenCount() )                     // readMessageOverwrittenCount() returns a count of how many messages have been missed. Must be ZERO !
+        if(ltto.readMessageOverwrittenCount() > 0 )                     // readMessageOverwrittenCount() returns a count of how many messages have been missed. Must be ZERO !
         {
             Serial.print(F("\n\nSorry but the main loop is too slow - "));
             Serial.print(ltto.readMessageOverwrittenCount() );
             Serial.print(F(" message/s missed\n"));
+            ltto.writeClearMessageOverwrittenCount();
         }
     }
 }

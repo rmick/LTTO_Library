@@ -5,37 +5,49 @@
 #include <Arduino.h>
 #include "LTTO.h"
 
-byte fifoPushPointer = 0;
-byte fifoPopPointer = 0;
 
-void LTTO::PushToFifo()          // Push latest message onto FIFO
+void LTTO::PushToFifo(char type, uint16_t message)          // Push latest message onto FIFO
 {
-    incomingIRmessageFIFO[fifoPopPointer].type = incomingIRmessage.type;
-    incomingIRmessageFIFO[fifoPopPointer].rawDataPacket = incomingIRmessage.rawDataPacket;
+    _incomingIRmessageFIFO[_fifoPushPointer].type = type;
+    _incomingIRmessageFIFO[_fifoPushPointer].rawDataPacket = message;
+    _incomingIRmessageFIFO[_fifoPushPointer].processed = false;
+    // Serial.print(F("\nPush : "));
+    // Serial.print(_fifoPushPointer);
+    // Serial.print(F(" : "));
+    // Serial.print(type);
+    // Serial.print(F(" : "));
+    // Serial.print(message);
 
-    newMessageWaiting = true;
     return;
 
-    fifoPushPointer++;
-    if (fifoPushPointer == 10)
-    {
-        if (fifoPopPointer == 0) messageOverwrittenCount++;
-        fifoPushPointer = 0;
-    }
-
+    _fifoPushPointer++;
+    //if (_fifoPushPointer > _fifoPopPointer) _messageOverwrittenCount++;
+    if (_fifoPushPointer > FIFO_SIZE) _fifoPushPointer = 0;
 }
 
 void LTTO::PopFromFifo()                                    // Pop latest message from the FIFO
 {
     // Is there a new message to collect?
+    if (_incomingIRmessageFIFO[_fifoPopPointer].processed == true)
+    {
+        //Serial.print(F("."));
+        return;
+    }
+    //if (_numberOfMessagesWaiting == 0) return;
 
-    decodedIRmessage.type = incomingIRmessageFIFO[fifoPopPointer].type;
-    decodedIRmessage.rawDataPacket = incomingIRmessageFIFO[fifoPopPointer].rawDataPacket;
-    newMessageWaiting = false;
+    decodedIRmessage.type = _incomingIRmessageFIFO[_fifoPopPointer].type;
+    decodedIRmessage.rawDataPacket = _incomingIRmessageFIFO[_fifoPopPointer].rawDataPacket;
+    decodedIRmessage.newMessage = true;
+    _incomingIRmessageFIFO[_fifoPopPointer].processed = true;
+    // Serial.print(F("\nPop  : # "));
+    // Serial.print(_fifoPopPointer);
+    // Serial.print(F(" : "));
+    // Serial.print(decodedIRmessage.type);
+    // Serial.print(F(" : "));
+    // Serial.print(decodedIRmessage.rawDataPacket);
 
     return;
 
-    fifoPopPointer++;
-    if (fifoPopPointer == 10 && fifoPushPointer == 0) messageOverwrittenCount++;
-    if (fifoPopPointer == 10) fifoPopPointer = 0;
+    _fifoPopPointer++;
+    if (_fifoPopPointer > FIFO_SIZE) _fifoPopPointer = 0;
 }

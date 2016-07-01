@@ -5,15 +5,20 @@
 ///---------------------------------------------------------------------------------------------------------
 //    Public : getXXXXX - Returns the decoded variables of the last IR message
 
-bool LTTO::readNewMessageAvailable()
+// byte LTTO::readNumberOfMessagesAvailable()
+// {
+//     return _numberOfMessagesWaiting;
+// }
+
+void LTTO::writeClearMessageOverwrittenCount()
 {
-    return newMessageWaiting;
+_numberOfMessagesWaiting = 0;
 }
 
-void LTTO::writeMessageProcessed()
-{
-    newMessageWaiting = false;
-}
+// void LTTO::writeMessageProcessed()
+// {
+//     _numberOfMessagesWaiting--;
+// }
 
 char LTTO::readMessageType()
 {
@@ -27,7 +32,7 @@ unsigned int LTTO::readRawDataPacket()
 
 byte LTTO::readMessageOverwrittenCount()
 {
-    return messageOverwrittenCount;
+    return _messageOverwrittenCount;
 }
 
 byte LTTO::readTeamID()
@@ -85,7 +90,7 @@ bool LTTO::readCheckSumOK()
 
 void LTTO::IncrementMessageOverwrittenCount()
 {
-    messageOverwrittenCount++;
+    _messageOverwrittenCount++;
 }
 
 void LTTO::PinChange()
@@ -161,10 +166,13 @@ void LTTO::PinChange()
 
 void LTTO::CreateIRmessage()                              //  TODO: Currently not checking for valid -2mS breaks !!!!
 {
+    char     _messageIRtype = ' ';
+    uint16_t _messageIRdataPacket = 0;
+
     if (irPacketLength < 6)                           //  The message was incomplete.
     {
-        incomingIRmessage.type = SHORT_PACKET;
-        PushToFifo();
+        _messageIRtype = SHORT_PACKET;
+        PushToFifo(_messageIRtype, 0);
         return;
     }
 
@@ -175,26 +183,26 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     if (_messageIR[1] == 3 && _messageIR[2] == -6);     //  We have a good header.
     else
     {
-        incomingIRmessage.type = NON_36_HEADER;
-        PushToFifo();
-    #ifdef DEBUG
-        digitalWrite(DE_BUG_TIMING_PIN, HIGH);
-    #endif
+        _messageIRtype = NON_36_HEADER;
+        PushToFifo(_messageIRtype, 0);
+        #ifdef DEBUG
+            digitalWrite(DE_BUG_TIMING_PIN, HIGH);
+        #endif
         return;
     }
 
     ////---------------------------------------------------------------------------------------------------------
     //  Set the message type via the number of bits received (and 1/9th bit of Packet/Checksum)
 
-    if      (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 0)   incomingIRmessage.type = 'P';          // Packet
-    else if (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 1)   incomingIRmessage.type = 'C';          // Checksum
-    else if (irPacketLength > 18 && _messageIR[3] == 3 && irPacketLength < 21)  incomingIRmessage.type = 'D';          // Data
-    else if (irPacketLength > 16 && _messageIR[3] == 3 && irPacketLength < 19)  incomingIRmessage.type = 'T';          // Tag
-    else if (irPacketLength > 12 && _messageIR[3] == 6 && irPacketLength < 15)  incomingIRmessage.type = 'B';          // Beacon - only beacons have 3/6/6 header !!
+    if      (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 0)   _messageIRtype = 'P';          // Packet
+    else if (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 1)   _messageIRtype = 'C';          // Checksum
+    else if (irPacketLength > 18 && _messageIR[3] == 3 && irPacketLength < 21)  _messageIRtype = 'D';          // Data
+    else if (irPacketLength > 16 && _messageIR[3] == 3 && irPacketLength < 19)  _messageIRtype = 'T';          // Tag
+    else if (irPacketLength > 12 && _messageIR[3] == 6 && irPacketLength < 15)  _messageIRtype = 'B';          // Beacon - only beacons have 3/6/6 header !!
     else
     {
-        incomingIRmessage.type = INVALID_TYPE;
-        PushToFifo();
+        _messageIRtype = INVALID_TYPE;
+        PushToFifo(_messageIRtype, 0);
         #ifdef DEBUG
             digitalWrite(DE_BUG_TIMING_PIN, HIGH);
         #endif
@@ -204,26 +212,26 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     ////---------------------------------------------------------------------------------------------------------
     // Set the message length based on the type
 
-    byte messageLength = 0;
-    if      (incomingIRmessage.type == 'T') messageLength = 17;           // Long Break [0] + 3 header [1,2,3] + break [4] + 7 bits,breaks [5,7,9,11,13,15,17]
-    else if (incomingIRmessage.type == 'B') messageLength = 13;           // Long Break [0] + 3 header [1,2,3] + break [4] + 5 bits,breaks [5,7,9,11,13]
-    else if (incomingIRmessage.type == 'P') messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
-    else if (incomingIRmessage.type == 'D') messageLength = 19;           // Long Break [0] + 3 header [1,2,3] + break [4] + 8 bits,breaks [5,7,9,11,13,15,17,19]
-    else if (incomingIRmessage.type == 'C') messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
+    byte _messageLength = 0;
+    if      (_messageIRtype == 'T') _messageLength = 17;           // Long Break [0] + 3 header [1,2,3] + break [4] + 7 bits,breaks [5,7,9,11,13,15,17]
+    else if (_messageIRtype == 'B') _messageLength = 13;           // Long Break [0] + 3 header [1,2,3] + break [4] + 5 bits,breaks [5,7,9,11,13]
+    else if (_messageIRtype == 'P') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
+    else if (_messageIRtype == 'D') _messageLength = 19;           // Long Break [0] + 3 header [1,2,3] + break [4] + 8 bits,breaks [5,7,9,11,13,15,17,19]
+    else if (_messageIRtype == 'C') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
 
     ////---------------------------------------------------------------------------------------------------------
     //  Push the data into the dataPacket
 
-    for (int i = 5; i<=messageLength; i+=2)
+    for (int i = 5; i <= _messageLength; i+=2)
     {
-        incomingIRmessage.rawDataPacket = incomingIRmessage.rawDataPacket << 1;
-        incomingIRmessage.rawDataPacket = incomingIRmessage.rawDataPacket + (_messageIR [i]);
+        _messageIRdataPacket = _messageIRdataPacket << 1;
+        _messageIRdataPacket = _messageIRdataPacket + (_messageIR [i]);
     }
 
     ////---------------------------------------------------------------------------------------------------------
     //  Tidy up and go home
 
-    PushToFifo();
+    PushToFifo(_messageIRtype , _messageIRdataPacket);
 
     #ifdef DEBUG
         digitalWrite(DE_BUG_TIMING_PIN, LOW);
@@ -243,12 +251,9 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
 //              It also fills in all the fields of the struct dataPacket
 bool LTTO::available()
 {
-    if (newMessageWaiting == false)
-    {
-        return false;
-    }
-
     PopFromFifo();
+
+    if (decodedIRmessage.newMessage == false) return false;
 
     if      (decodedIRmessage.type == TAG)      ProcessTag();
     //TODO: Check for a bad 3/6 Tag packet and then flag as a near miss !!
@@ -259,9 +264,11 @@ bool LTTO::available()
     else if (decodedIRmessage.type == SHORT_PACKET)   { _badMessage_CountISRshortPacket++;   decodedIRmessage.type = BAD_MESSAGE; }
     else if (decodedIRmessage.type == INVALID_TYPE)   { _badMessage_InvalidPacketType++;     decodedIRmessage.type = BAD_MESSAGE; }
     else if (decodedIRmessage.type == NON_36_HEADER)  { _badMessage_non3_6Header++;          decodedIRmessage.type = BAD_MESSAGE; }
-
-    newMessageWaiting = false;
+    decodedIRmessage.newMessage = false;
     return true;
+
+    //_numberOfMessagesWaiting--;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

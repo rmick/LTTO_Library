@@ -23,17 +23,14 @@ LTTO::LTTO(byte txPin, byte rxPin)
     irPacketLength = 0;
     countISR = 0;
 
-    //_byteCount =  0;
-    //_checkSumRx = 0;
-
     _shortPulseLengthError = 0;
     _arrayOverLengthError = 0;
     _badMessage_CountISRshortPacket = 0;
     _badMessage_InvalidPacketType = 0;
     _badMessage_non3_6Header = 0;
 
-    byte fifoPushPointer = 0;
-    byte fifoPopPointer = 0;
+    _fifoPushPointer = 0;
+    _fifoPopPointer = 0;
 
     ////----------------------------------------------------------------------------------------------
     //    Set Timer0 interrupt
@@ -81,33 +78,35 @@ void LTTO::readErrorCounts()
 
 
 
-void LTTO::printBinary(int number, int numberOfDigits)
+void LTTO::printBinary(uint16_t number, byte numberOfDigits)
 {
-#ifdef DEBUG
-    int mask = 0;
-    for (byte n = 1; n <= numberOfDigits; n++)
-    {
-        mask = (mask << 1) | 0x0001;
-    }
-    number = number & mask;  // truncate v to specified number of places
-
-    while(numberOfDigits)
-    {
-        if (number & (0x0001 << (numberOfDigits - 1) ) )
+    uint16_t _number = number;
+    byte _numberOfDigits = numberOfDigits;
+    #ifdef DEBUG
+        int _mask = 0;
+        for (byte _n = 1; _n <= _numberOfDigits; _n++)
         {
-            Serial.print(F("1"));
+            _mask = (_mask << 1) | 0x0001;
         }
-        else
-        {
-            Serial.print(F("0"));
-        }
+        _number = _number & _mask;  // truncate v to specified number of places
 
-        --numberOfDigits;
-
-        if( ( (numberOfDigits % 4) == 0) && (numberOfDigits != 0) )
+        while(_numberOfDigits)
         {
-            Serial.print(F("_"));
+            if (_number & (0x0001 << (_numberOfDigits - 1) ) )
+            {
+                Serial.print(F("1"));
+            }
+            else
+            {
+                Serial.print(F("0"));
+            }
+
+            --_numberOfDigits;
+
+            if( ( (_numberOfDigits % 4) == 0) && (_numberOfDigits != 0) )
+            {
+                Serial.print(F("_"));
+            }
         }
-    }
-#endif
+    #endif
 }

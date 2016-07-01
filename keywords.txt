@@ -2,14 +2,14 @@
 LTTO                    KEYWORD1
 
 sendIR                      KEYWORD2
+sendLTAG                    KEYWORD2
 sendTag                     KEYWORD2
 sendBeacon                  KEYWORD2
 sendZoneBeacon              KEYWORD2
 sendLTARbeacon              KEYWORD2
 
 available                   KEYWORD2
-readNewMessage              KEYWORD2
-writeMessageProcessed       KEYWORD2
+writeClearMessageOverwrittenCount KEYWORD2
 readMessageType             KEYWORD2
 readRawDataPacket           KEYWORD2
 readMessageOverwrittenCount KEYWORD2

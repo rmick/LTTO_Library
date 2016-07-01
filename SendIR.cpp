@@ -124,11 +124,13 @@ void LTTO::PulseIR(byte _mSec)
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
+bool LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
 {
     uint16_t _fireMessage = 0;
 
-    if (playerID == 0) playerID = 1;                    //Trap in case they use PlayerID 0 !!!!
+    if (playerID < 1 || playerID > 8) return false;
+    if (teamID > 3)                   return false;
+    if (tagPower <1  || tagPower > 4) return false;
 
     //Assemble the fireMessage
     _fireMessage = _fireMessage << 2;
@@ -138,6 +140,7 @@ void LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
     _fireMessage = _fireMessage << 2;
     _fireMessage = _fireMessage + (tagPower-1);
     sendIR( TAG, _fireMessage);
+    return true;
 }
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,12 +148,40 @@ void LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///---------------------------------------------------------------------------------------------------------
+//    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
+
+bool LTTO::sendLTAG(byte playerID, byte tagPower)
+{
+    uint16_t _fireMessage = 0;
+
+    if (playerID < 1 || playerID > 8) return false;
+    if (tagPower <1  || tagPower > 4) return false;
+
+    //Assemble the fireMessage
+    _fireMessage = _fireMessage << 2;
+    _fireMessage = 0;
+    _fireMessage = _fireMessage << 3;
+    _fireMessage = _fireMessage + (playerID-1);
+    _fireMessage = _fireMessage << 2;
+    _fireMessage = _fireMessage + (tagPower-1);
+    sendIR( TAG, _fireMessage);
+    return true;
+}
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///---------------------------------------------------------------------------------------------------------
 //    Public : SendBeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::sendBeacon(bool tagReceived, byte teamID, byte tagPower)
+bool LTTO::sendBeacon(bool tagReceived, byte teamID, byte tagPower)
 {
     uint16_t _beaconMessage;
 
+    if (teamID > 3)                   return false;
+    if (tagPower <1  || tagPower > 4) return false;
     //Assemble the fireMessage
     _beaconMessage = teamID;
     _beaconMessage = _beaconMessage << 1;
@@ -159,6 +190,7 @@ void LTTO::sendBeacon(bool tagReceived, byte teamID, byte tagPower)
     _beaconMessage = _beaconMessage + (tagPower-1);
 
     this->sendIR( BEACON, _beaconMessage);
+    return true;
 }
 
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,10 +201,11 @@ void LTTO::sendBeacon(bool tagReceived, byte teamID, byte tagPower)
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendZoneBeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-void LTTO::sendZoneBeacon(byte zoneType, byte teamID)
+bool LTTO::sendZoneBeacon(byte zoneType, byte teamID)
 {
     uint16_t _beaconMessage;
 
+    if (teamID > 3)   return false;
     //Assemble the fireMessage
     _beaconMessage = teamID;
     _beaconMessage = _beaconMessage << 1;
@@ -181,6 +214,7 @@ void LTTO::sendZoneBeacon(byte zoneType, byte teamID)
     _beaconMessage = _beaconMessage + zoneType;                   // 00-Invalid, 01-Reserved, 10-Contested Zone, 11-Supply Zone
 
     this->sendIR( BEACON, _beaconMessage);
+    return true;
 }
 
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,24 +225,26 @@ void LTTO::sendZoneBeacon(byte zoneType, byte teamID)
 
 // ///---------------------------------------------------------------------------------------------------------
 // //    Public : SendLTARbeacon - This takes the simple data, translates it into Binary and sends it using the SendIR class
-//
-// void LTTO::sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID)
-// {
-//     uint16_t _beaconMessage;
-//
-//     //Assemble the fireMessage
-//     _beaconMessage = tagReceived;
-//     _beaconMessage = _beaconMessage << 1;
-//     _beaconMessage = _beaconMessage + shieldsActive;
-//     _beaconMessage = _beaconMessage << 2;
-//     _beaconMessage = _beaconMessage + tagsRemaining;                    //00-None, 01 - 1 to 25%, 10 - 25 to 50%, 11 - 51 to 100%
-//     _beaconMessage = _beaconMessage << 3;
-//     _beaconMessage = _beaconMessage + unKnown;
-//     _beaconMessage = _beaconMessage << 2;
-//     _beaconMessage = _beaconMessage + teamID;
-//
-//     this->sendIR( BEACON, _beaconMessage);
-// }
+
+bool LTTO::sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID)
+{
+    uint16_t _beaconMessage;
+
+    if (teamID > 3)   return false;
+    //Assemble the fireMessage
+    _beaconMessage = tagReceived;
+    _beaconMessage = _beaconMessage << 1;
+    _beaconMessage = _beaconMessage + shieldsActive;
+    _beaconMessage = _beaconMessage << 2;
+    _beaconMessage = _beaconMessage + tagsRemaining;                    //00-None, 01 - 1 to 25%, 10 - 25 to 50%, 11 - 51 to 100%
+    _beaconMessage = _beaconMessage << 3;
+    _beaconMessage = _beaconMessage + unKnown;
+    _beaconMessage = _beaconMessage << 2;
+    _beaconMessage = _beaconMessage + teamID;
+
+    this->sendIR( BEACON, _beaconMessage);
+    return true;
+}
 
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

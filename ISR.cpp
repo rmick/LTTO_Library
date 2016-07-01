@@ -55,7 +55,6 @@ SIGNAL(TIMER0_COMPA_vect)
                 digitalWrite(DE_BUG_TIMING_PIN, HIGH);
 #endif
                 //TODO : this is no longer valid now that we have a FIFO !!!!
-                if (( isrArray[arrayIndex]->readNewMessageAvailable() == true) ) isrArray[arrayIndex]->IncrementMessageOverwrittenCount();
 
                 isrArray[arrayIndex]->receiveMilliTimer = 32767;
                 isrArray[arrayIndex]->irPacketLength    = isrArray[arrayIndex]->countISR;

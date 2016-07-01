@@ -19,6 +19,7 @@
 
 const byte  ARRAY_LENGTH = 28;
 const byte  IR_TIME_OUT  = 9;
+const byte  FIFO_SIZE    = 10;
 
 #define DEBUG
 #define DE_BUG_TIMING_PIN   12
@@ -32,16 +33,16 @@ public:
     ////---------------------------------------------------------------------------------------------------------
     //  Public member functions
 
-    LTTO (byte txPin, byte rxPin);
+    LTTO(byte txPin, byte rxPin);
     void        sendIR(char type, uint16_t message);
-    void        sendTag(byte teamID, byte playerID, byte tagPower);
-    void        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
-    void        sendZoneBeacon(byte zoneType, byte teamID);
-    void        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
-    bool        available();
+    bool        sendLTAG(byte playerID, byte tagPower);
+    bool        sendTag(byte teamID, byte playerID, byte tagPower);
+    bool        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
+    bool        sendZoneBeacon(byte zoneType, byte teamID);
+    bool        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
 
-    bool        readNewMessageAvailable();
-    void        writeMessageProcessed();
+    bool        available();
+    void        writeClearMessageOverwrittenCount();
     char        readMessageType();
     uint16_t    readRawDataPacket();
     byte        readMessageOverwrittenCount();
@@ -58,7 +59,7 @@ public:
     bool        readCheckSumOK();
 
 
-    void        printBinary(int v, int num_places);
+    void        printBinary(uint16_t number, byte numberOfDigits);
     void        readErrorCounts();
     void        printIR(char mode);
 
@@ -85,7 +86,7 @@ private:
     void ProcessPacket();
     void ProcessDataByte();
     void ProcessCheckSum();
-    void PushToFifo();
+    void PushToFifo(char type, uint16_t message);
     void PopFromFifo();
 
     ////---------------------------------------------------------------------------------------------------------
@@ -97,8 +98,8 @@ private:
     byte _deBugPin;                     // The Pin used for debugging (via a Logic Analyser or Oscilloscope)
 
     //Other variables
-    int8_t      _messageIR [ARRAY_LENGTH];      // Array of IR data bits, populated by PinChange
-    byte        _checkSumCalc;                  // Used to calculate the SendIR CheckSum
+    int8_t  _messageIR [ARRAY_LENGTH];      // Array of IR data bits, populated by PinChange
+    byte    _checkSumCalc;                  // Used to calculate the SendIR CheckSum
 
     // Error checking and debug counters
     volatile byte   _shortPulseLengthError;
@@ -109,7 +110,7 @@ private:
 
     struct irMessage
     {
-        //volatile bool           newMessage;               //  true = Yes there is a new message waiting
+        volatile bool           newMessage;               //  true = Yes this is a new message waiting
         volatile char           type;                     //  T, B, P, D, C
         volatile unsigned int   rawDataPacket;            //  The undecoded datapacket
         //volatile byte           messageOverwrittenCount;  //  This counts messages that are overwritten by a new packet before being read by the main loop 'if(DecodeIR() )' call
@@ -139,15 +140,15 @@ private:
     {
         volatile char           type;                     //  T, B, P, D, C
         volatile unsigned int   rawDataPacket;            //  The undecoded datapacket
+        volatile bool           processed;                //  Tracks whether this message has been processed.
     };
 
-    irRxRaw incomingIRmessage;
-    irRxRaw incomingIRmessageFIFO[10];
+    irRxRaw _incomingIRmessageFIFO[FIFO_SIZE];
 
-    byte fifoPushPointer;
-    byte fifoPopPointer;
-    volatile byte           messageOverwrittenCount;
-    volatile bool           newMessageWaiting;
+    byte            _fifoPushPointer;
+    byte            _fifoPopPointer;
+    volatile byte   _messageOverwrittenCount;
+    volatile int8_t _numberOfMessagesWaiting;
 };
 
 void SetUpPinChangeInterupt(byte interruptPin, LTTO* lttoInstance );           // Need to pre-declare it here, otherwise the Compiler barks !
