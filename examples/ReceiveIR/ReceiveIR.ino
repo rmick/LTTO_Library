@@ -111,4 +111,23 @@ void loop() {
             ltto.writeClearMessageOverwrittenCount();
         }
     }
+
+
+    if (Serial.available() !=0)
+     {
+         char keyIn = Serial.read();
+         switch (keyIn)
+         {
+             case '1':
+                 delay (1000);
+                 break;
+             case '2':
+                 delay (2000);
+                 break;
+             case '5':
+                 delay (5000);
+                 break;
+        }
+
+    }
 }

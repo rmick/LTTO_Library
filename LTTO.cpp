@@ -73,10 +73,82 @@ void LTTO::readErrorCounts()
 
 
 ///---------------------------------------------------------------------------------------------------------
+//    Public : read/writeXXXXX - Returns the decoded variables of the last IR message
+
+void LTTO::clearMessageOverwrittenCount()
+{
+_messageOverwrittenCount = 0;
+}
+
+byte LTTO::readMessageOverwrittenCount()
+{
+    return _messageOverwrittenCount;
+}
+
+char LTTO::readMessageType()
+{
+    return decodedIRmessage.type;
+}
+
+unsigned int LTTO::readRawDataPacket()
+{
+    return decodedIRmessage.rawDataPacket;
+}
+
+byte LTTO::readTeamID()
+{
+    return decodedIRmessage.teamID;
+}
+
+byte LTTO::readPlayerID()
+{
+    return decodedIRmessage.playerID;
+}
+
+byte LTTO::readShotStrength()
+{
+    return decodedIRmessage.shotStrength;
+}
+
+char LTTO::readBeaconType()
+{
+    return decodedIRmessage.beaconType;
+}
+
+byte LTTO::readPacketByte()
+{
+    return decodedIRmessage.packetByte;
+}
+
+String LTTO::readPacketName()
+{
+    return decodedIRmessage.packetName;
+}
+
+String LTTO::readDataType()
+{
+    return decodedIRmessage.dataType;
+}
+
+long int LTTO::readDataByte()
+{
+    return decodedIRmessage.dataByte;
+}
+
+uint8_t LTTO::readCheckSumRxByte()
+{
+    return decodedIRmessage.checkSumRxByte;
+}
+
+bool LTTO::readCheckSumOK()
+{
+    return decodedIRmessage.checkSumOK;
+}
+
+
+///---------------------------------------------------------------------------------------------------------
 //    Public : PrintBinary - Prints out any number in Binary, including lead zeros, the size specified.
 //                           Very useful for debugging
-
-
 
 void LTTO::printBinary(uint16_t number, byte numberOfDigits)
 {

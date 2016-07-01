@@ -19,7 +19,7 @@
 
 const byte  ARRAY_LENGTH = 28;
 const byte  IR_TIME_OUT  = 9;
-const byte  FIFO_SIZE    = 10;
+const byte  FIFO_SIZE    = 5;
 
 #define DEBUG
 #define DE_BUG_TIMING_PIN   12
@@ -42,10 +42,10 @@ public:
     bool        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
 
     bool        available();
-    void        writeClearMessageOverwrittenCount();
+    void        clearMessageOverwrittenCount();
+    byte        readMessageOverwrittenCount();
     char        readMessageType();
     uint16_t    readRawDataPacket();
-    byte        readMessageOverwrittenCount();
     byte        readTeamID();
     byte        readPlayerID();
     byte        readShotStrength();
@@ -145,8 +145,8 @@ private:
 
     irRxRaw _incomingIRmessageFIFO[FIFO_SIZE];
 
-    byte            _fifoPushPointer;
-    byte            _fifoPopPointer;
+    volatile int8_t _fifoPushPointer;
+    volatile int8_t _fifoPopPointer;
     volatile byte   _messageOverwrittenCount;
     volatile int8_t _numberOfMessagesWaiting;
 };
