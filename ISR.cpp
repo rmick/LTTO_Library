@@ -51,18 +51,16 @@ SIGNAL(TIMER0_COMPA_vect)
 
             if (isrArray[arrayIndex]->receiveMilliTimer == 0)
             {
-#ifdef DEBUG
-                digitalWrite(DE_BUG_TIMING_PIN, HIGH);
-#endif
-                //TODO : this is no longer valid now that we have a FIFO !!!!
-
+                #ifdef DEBUG
+                    digitalWrite(DE_BUG_TIMING_PIN, HIGH);
+                #endif
                 isrArray[arrayIndex]->receiveMilliTimer = 32767;
                 isrArray[arrayIndex]->irPacketLength    = isrArray[arrayIndex]->countISR;
                 isrArray[arrayIndex]->countISR          = 0;
                 isrArray[arrayIndex]->CreateIRmessage();
-#ifdef DEBUG
-                digitalWrite(DE_BUG_TIMING_PIN, LOW);
-#endif
+                #ifdef DEBUG
+                    digitalWrite(DE_BUG_TIMING_PIN, LOW);
+                #endif
             }
 
             ////---------------------------------------------------------------------------------------------------------
