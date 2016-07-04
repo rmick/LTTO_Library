@@ -2,12 +2,12 @@
 
 ///---------------------------------------------------------------------------------------------------------
 //    LTTO set up
-
+#define DEBUG
 #define EI_ARDUINO_INTERRUPTED_PIN          //  This tells the ISR routine which was the last Pin that changed
 #include <EnableInterrupt.h>                //  This is required for the LTTO libary to work.  https://github.com/GreyGnome/EnableInterrupt
 #include <LTTO.h>
 
-LTTO ltto(13, 11);                          //  This creates an instance of the LTTO object, called ltto, using Pin 13 to Tx and Pin 11 to Rx.
+LTTO ltto(13, 9);                          //  This creates an instance of the LTTO object, called ltto, using Pin 13 to Tx and Pin 11 to Rx.
                                             //  N.B. - You can use ANY pins on the Arduino, not just 13 and 11.
 
 ////---------------------------------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ void loop() {
         {
             Serial.print(F("\n\nSorry but the main loop is too slow - "));
             Serial.print(ltto.readMessageOverwrittenCount() );
-            Serial.print(F(" message/s missed\n"));
+            Serial.println(F(" message/s missed\n"));
             ltto.clearMessageOverwrittenCount();
         }
     }
