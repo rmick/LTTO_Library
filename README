@@ -8,16 +8,80 @@ I am a self taught programmer, who has been using Arduino's since early 2015.
 I am still learning, but my code is now at the point that I am happy to share it.
 
 ----------------------------------------------------------------------------------------
-SCHEMATIC
+CIRCUIT REQUIREMENTS
 
-Connect an IR LED between Pin 13 and GND
+Connect an IR LED between Pin 13 and a 100 ohm resistor to GND.
 Part # TSAL6200
 
 Connect a 38kHz IR receiver as below
 Part # TSOP4138
-    - IR receiver Pin1 (Out) to Arduino Pin11
+    - IR receiver Pin1 (Out) to Arduino Pin 11
     - IR receiver Pin2 (Gnd) to Arduino GND
     - IR receiver Pin3 (Vcc) to Arduino +5v
+
+----------------------------------------------------------------------------------------
+GETTING STARTED
+
+This library is designed to be very simple for even an Arduino newbie.
+
+1)  Make sure that you have a good understanding of these examples.
+    - Basics / Blink
+    - Digital / Button
+    - AnalogReadSerial or DigitalReadSerial
+
+2)  Start with SendTag or SendLTAG both of which send a tag when the button is pressed.
+    Use the Digital/Button example circuit - just replace the normal LED with an IR LED.
+    - SendTag is for hosted games (be aware that you must have a gun with same Team # & Player ID in the game for the shot to be received)
+    - SendLTAG is for non hosted games
+
+3)  Medic Station is a simple Respawn station that sends a Respawn signal when the button is pressed.
+    Use the Digital/Button example circuit - just replace the normal LED with an IR LED.
+    (This works in hosted games where the MedicMode is enabled)
+    There is an optional delay setting so that the user has to wait XX seconds after pressing the button
+    for the Respawn signal (we use 30 seconds to stop people re-entering the game too quickly)
+
+4)  SendTextMessage sends the text 'HELLO' to any gun in range.
+    Use the Digital/Button example circuit - just replace the normal LED with an IR LED.
+    It is a good way to start learning how to send IR messages.
+    Visit wiki.lazerswarm for details on the protocol
+
+5)  ReceiveTag sends a message with the details of the tag received to the Arduino Serial Monitor.
+    Connect the IR receiver as per the circuit above, and set the Serial Monitor speed to 115200 baud.
+
+6)  ReceiveIR sends a complete decode of all IR messages to the Arduino Serial Monitor.
+    Connect the IR receiver as per the circuit above, and set the Serial Monitor speed to 115200 baud.
+
+----------------------------------------------------------------------------------------
+LIST OF METHODS:
+
+        void        sendIR(char type, uint16_t message);
+        bool        sendLTAG(byte playerID, byte tagPower);
+        bool        sendTag(byte teamID, byte playerID, byte tagPower);
+        bool        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
+        bool        sendZoneBeacon(byte zoneType, byte teamID);
+        bool        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
+
+        bool        available();
+        void        clearMessageOverwrittenCount();
+        byte        readMessageOverwrittenCount();
+        char        readMessageType();
+        uint16_t    readRawDataPacket();
+        byte        readTeamID();
+        byte        readPlayerID();
+        byte        readShotStrength();
+        char        readBeaconType();
+        bool        readTagReceivedBeacon();
+        byte        readPacketByte();
+        String      readPacketName();
+        String      readDataType();
+        long int    readDataByte();
+        uint8_t     readCheckSumRxByte();
+        bool        readCheckSumOK();
+
+        DEBUG METHODS
+        void        printBinary(uint16_t number, byte numberOfDigits);
+        void        readErrors();
+        void        printIR(char mode);
 
 ----------------------------------------------------------------------------------------
 CREDITS

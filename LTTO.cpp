@@ -45,6 +45,10 @@ LTTO::LTTO(byte txPin, byte rxPin)
     SetUpPinChangeInterupt(_rxPin, this );
 };
 
+void LTTO::begin(byte txPinA, byte rxPinA)
+{
+
+}
 ///---------------------------------------------------------------------------------------------------------
 //    LTTO Destructor
 
@@ -55,7 +59,7 @@ LTTO::LTTO(byte txPin, byte rxPin)
 ///---------------------------------------------------------------------------------------------------------
 //    Public: This routine Serial.prints the error counts.
 
-void LTTO::readErrorCounts()
+void LTTO::readErrors()
 {
     Serial.print(F("\n----------------"));
     Serial.print(F("\nShortPulse: "));
@@ -77,7 +81,7 @@ void LTTO::readErrorCounts()
 
 void LTTO::clearMessageOverwrittenCount()
 {
-_messageOverwrittenCount = 0;
+    _messageOverwrittenCount = 0;
 }
 
 byte LTTO::readMessageOverwrittenCount()

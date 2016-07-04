@@ -17,8 +17,8 @@
 
 #define     IFF_BEACON          '0'
 #define     HIT_RESPONSE_BEACON '1'
-#define     SUPPLY_ZONE         'S'
-#define     CONTESTED_ZONE      'C'
+#define     SUPPLY_ZONE         '3'
+#define     CONTESTED_ZONE      '2'
 #define     ZONE_BEACON         'Z'
 
 ////---------------------------------------------------------------------------------------------------------

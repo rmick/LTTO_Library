@@ -150,19 +150,12 @@ bool LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
 ///---------------------------------------------------------------------------------------------------------
 //    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
-bool LTTO::sendLTAG(byte playerID, byte tagPower)
+bool LTTO::sendLTAG(byte tagPower)
 {
     uint16_t _fireMessage = 0;
 
-    if (playerID < 1 || playerID > 8) return false;
     if (tagPower <1  || tagPower > 4) return false;
 
-    //Assemble the fireMessage
-    _fireMessage = _fireMessage << 2;
-    _fireMessage = 0;
-    _fireMessage = _fireMessage << 3;
-    _fireMessage = _fireMessage + (playerID-1);
-    _fireMessage = _fireMessage << 2;
     _fireMessage = _fireMessage + (tagPower-1);
     sendIR( TAG, _fireMessage);
     return true;

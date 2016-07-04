@@ -6,10 +6,10 @@
 ///---------------------------------------------------------------------------------------------------------
 //    Private-Public : Required to be Public for the ISR, but not advertised - DO NOT USE OUTSIDE THE CLASS !!!!!
 
-void LTTO::IncrementMessageOverwrittenCount()
-{
-    _messageOverwrittenCount++;
-}
+// void LTTO::IncrementMessageOverwrittenCount()
+// {
+//     _messageOverwrittenCount++;
+// }
 
 void LTTO::PinChange()
 {

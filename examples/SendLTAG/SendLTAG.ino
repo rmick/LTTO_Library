@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 ////---------------------------------------------------------------------------------------------------------
 //    LTTO set up
 
@@ -10,8 +12,6 @@ LTTO ltto(13, 11);                          //  This creates an instance of the 
 
 const int buttonPin = 2;                    // the number of the pushbutton pin
 
-bool buttonState = 0;                                   // variable for reading the pushbutton status
-
 ////---------------------------------------------------------------------------------------------------------
 
 void setup()
@@ -22,18 +22,16 @@ void setup()
     pinMode(buttonPin, INPUT);                          // initialize the pushbutton pin as an input:
 }
 
+int buttonState = 0;                                    // variable for reading the pushbutton status
+int shotStrength = 1;                                   // Create a variable called shotStrenght, set the value to 1,2,3,4 (1 = no-Mega)
+
 void loop()
 {
     buttonState = digitalRead(buttonPin);               // read the state of the pushbutton value:
 
     if (buttonState == HIGH)                            // check if the pushbutton is pressed - if it is, the buttonState is HIGH:
     {
-        ltto.sendIR(PACKET, TEXT_MESSAGE);                  // Send a Packet header of the type TEXT_MESSAGE
-        ltto.sendIR(DATA,   0x48);                          // The letter 'H' in ASCII hex
-        ltto.sendIR(DATA,   0x45);                          // The letter 'E' in ASCII hex
-        ltto.sendIR(DATA,   0x4C);                          // The letter 'L' in ASCII hex
-        ltto.sendIR(DATA,   0x4C);                          // The letter 'L' in ASCII hex
-        ltto.sendIR(DATA,   0x4F);                          // The letter 'O' in ASCII hex
-        ltto.sendIR(CHECKSUM, 0x00);                        // Send a CheckSum Packet - if you use 0x00 then the checksum is calculated for you.
+        ltto.sendLTAG(shotStrength);                    // Send a Tag from player 1, strength 1 (non Mega)
+        delay (200);                                    // Add a delay for button debounce
     }
 }

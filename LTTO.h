@@ -19,7 +19,7 @@
 
 const byte  ARRAY_LENGTH = 28;
 const byte  IR_TIME_OUT  = 9;
-const byte  FIFO_SIZE    = 5;
+const byte  FIFO_SIZE    = 25;
 
 #define DEBUG
 #define DE_BUG_TIMING_PIN   12
@@ -34,8 +34,9 @@ public:
     //  Public member functions
 
     LTTO(byte txPin, byte rxPin);
+    void        begin(byte txPinA, byte rxPinA);
     void        sendIR(char type, uint16_t message);
-    bool        sendLTAG(byte playerID, byte tagPower);
+    bool        sendLTAG(byte tagPower);
     bool        sendTag(byte teamID, byte playerID, byte tagPower);
     bool        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
     bool        sendZoneBeacon(byte zoneType, byte teamID);
@@ -60,13 +61,13 @@ public:
 
 
     void        printBinary(uint16_t number, byte numberOfDigits);
-    void        readErrorCounts();
+    void        readErrors();
     void        printIR(char mode);
 
     //Do NOT call these public functions, they are public solely to allow the ISR routines to access them
     void        PinChange(void);
     void        CreateIRmessage();
-    void        IncrementMessageOverwrittenCount();
+    //void        IncrementMessageOverwrittenCount();
 
     ////---------------------------------------------------------------------------------------------------------
     //  Public member variables

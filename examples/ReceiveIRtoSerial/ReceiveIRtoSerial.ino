@@ -17,7 +17,7 @@ LTTO ltto(13, 11);                          //  This creates an instance of the 
 void setup() {
 // put your setup code here, to run once:
 
-    Serial.begin(115000);                               //  Starts the Serial port for debugging
+    Serial.begin(115200);                               //  Starts the Serial port for debugging
     Serial.println(F("\nHere we go boys....."));        //  A short message so that we know something is happenning
 }
 
@@ -108,7 +108,7 @@ void loop() {
             Serial.print(F("\n\nSorry but the main loop is too slow - "));
             Serial.print(ltto.readMessageOverwrittenCount() );
             Serial.print(F(" message/s missed\n"));
-            ltto.writeClearMessageOverwrittenCount();
+            ltto.clearMessageOverwrittenCount();
         }
     }
 
