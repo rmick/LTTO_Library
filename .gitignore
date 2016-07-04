@@ -4,5 +4,5 @@
 LTTO.ino
 /lib
 .gitignore
-.yml
 platformio.ini
+*.yml
