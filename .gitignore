@@ -1,8 +1,3 @@
 .pioenvs
 .clang_complete
 .gcc-flags.json
-LTTO.ino
-/lib
-.gitignore
-platformio.ini
-*.yml

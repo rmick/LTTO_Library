@@ -21,8 +21,8 @@ const byte  ARRAY_LENGTH = 28;
 const byte  IR_TIME_OUT  = 9;
 const byte  FIFO_SIZE    = 25;
 
-#define DEBUG
-#define DE_BUG_TIMING_PIN   12
+//#define DEBUG
+//#define DE_BUG_TIMING_PIN   12
 
 ////---------------------------------------------------------------------------------------------------------
 //    Declare The class
@@ -33,8 +33,8 @@ public:
     ////---------------------------------------------------------------------------------------------------------
     //  Public member functions
 
-    LTTO(byte txPin, byte rxPin);
-    void        begin(byte txPinA, byte rxPinA);
+    LTTO();
+    void        begin(byte txPin, byte rxPin);
     void        sendIR(char type, uint16_t message);
     bool        sendLTAG(byte tagPower);
     bool        sendTag(byte teamID, byte playerID, byte tagPower);

@@ -23,15 +23,17 @@ Part # TSOP4138
 GETTING STARTED
 
 This library is designed to be very simple for even an Arduino newbie.
+You must install the LTTO library as well as the EnableInterrupt library (https://github.com/GreyGnome/EnableInterrupt)
 
 1)  Make sure that you have a good understanding of these examples.
     - Basics / Blink
     - Digital / Button
     - AnalogReadSerial or DigitalReadSerial
+    - www.arduino.cc/en/Guide/Libraries
 
 2)  Start with SendTag or SendLTAG both of which send a tag when the button is pressed.
     Use the Digital/Button example circuit - just replace the normal LED with an IR LED.
-    - SendTag is for hosted games (be aware that you must have a gun with same Team # & Player ID in the game for the shot to be received)
+    - SendTag is for hosted games (be aware that you must have a tagger with same Team # & Player ID in the game for the shot to be received)
     - SendLTAG is for non hosted games
 
 3)  Medic Station is a simple Respawn station that sends a Respawn signal when the button is pressed.

@@ -6,7 +6,12 @@
 ///---------------------------------------------------------------------------------------------------------
 //    The LTTO Constructor
 
-LTTO::LTTO(byte txPin, byte rxPin)
+LTTO::LTTO()
+{
+
+};
+
+void LTTO::begin(byte txPin, byte rxPin)
 {
     _txPin = txPin;
     _rxPin = rxPin;
@@ -43,12 +48,8 @@ LTTO::LTTO(byte txPin, byte rxPin)
     //    Add this instance to the Interrupt array
 
     SetUpPinChangeInterupt(_rxPin, this );
-};
-
-void LTTO::begin(byte txPinA, byte rxPinA)
-{
-
 }
+
 ///---------------------------------------------------------------------------------------------------------
 //    LTTO Destructor
 

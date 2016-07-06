@@ -169,6 +169,14 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
 //              It also fills in all the fields of the struct dataPacket
 bool LTTO::available()
 {
+    if (_messageOverwrittenCount != 0)                           // If there are errors, clear the FIFO to re-sync it
+    {
+        for (byte i = 0; i < FIFO_SIZE; i++)
+        {
+            _incomingIRmessageFIFO[i].processed = true;
+        }
+    }
+
     PopFromFifo();
 
     if (decodedIRmessage.newMessage == false) return false;
