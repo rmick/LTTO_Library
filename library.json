@@ -4,8 +4,8 @@
 	"keywords": "Lazertag, Lasertag, LTTO, LTAR, LTX, IR",
 	"version": "0.9.6",
 	"frameworks": "Arduino",
-
-	"repository": {
+	"repository":
+	{
 		"type": "git",
 		"url": "https://github.com/rmick/LTTO_Library"
 	},
