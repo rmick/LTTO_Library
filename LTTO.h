@@ -19,7 +19,7 @@
 
 const byte  ARRAY_LENGTH = 28;
 const byte  IR_TIME_OUT  = 9;
-const byte  FIFO_SIZE    = 25;
+const byte  FIFO_SIZE    = 20;
 
 //#define DEBUG
 //#define DE_BUG_TIMING_PIN   12

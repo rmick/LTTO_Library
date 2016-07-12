@@ -11,8 +11,8 @@ void LTTO::PushToFifo(char type, uint16_t message)          // Push latest messa
     if (_incomingIRmessageFIFO[_fifoPushPointer].processed == false)
     {
         _messageOverwrittenCount++;
-        Serial.print(F("Missed Pointer: "));
-        Serial.print(_fifoPushPointer);
+        //Serial.print(F("Missed Pointer: "));
+        //Serial.print(_fifoPushPointer);
     }
     _incomingIRmessageFIFO[_fifoPushPointer].type = type;
     _incomingIRmessageFIFO[_fifoPushPointer].rawDataPacket = message;

@@ -120,6 +120,10 @@ char LTTO::readBeaconType()
     return decodedIRmessage.beaconType;
 }
 
+bool LTTO::readTagReceivedBeacon()
+{
+    return decodedIRmessage.tagReceivedBeacon;
+}
 byte LTTO::readPacketByte()
 {
     return decodedIRmessage.packetByte;
