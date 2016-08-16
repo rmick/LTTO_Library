@@ -5,7 +5,7 @@
 #include <EnableInterrupt.h>
 #include "LTTO.h"
 
-const byte isrArrayLength = 16;
+const byte isrArrayLength = 15;
 LTTO* isrArray[isrArrayLength];
 
 ////---------------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ void ISRchange()
     {
         if (arduinoInterruptedPin == arrayIndex && isrArray[arrayIndex] != 0)           // !=0 is to stop noise on floating pins causing false triggering.
         {
-            isrArray[arrayIndex]->PinChange();
+			isrArray[arrayIndex]->PinChange();
         }
     }
 }
@@ -69,3 +69,32 @@ SIGNAL(TIMER0_COMPA_vect)
         }
     }
 }
+
+//TODO:
+
+////////////////////// TIMER 2 38kHz Oscilator/////////////////////
+
+  /*
+    TCCR2A = 0x00;
+    bitWrite(TCCR2A, COM2A0, 1);
+    bitWrite(TCCR2A, COM2B1, 1);
+    bitWrite(TCCR2A, WGM21, 1);
+    bitWrite(TCCR2A, WGM20, 1);
+
+    TCCR2B = 0x00;
+    bitWrite(TCCR2B, WGM22, 1);
+    bitWrite(TCCR2B, CS20, 1);
+
+    OCR2A = 209;
+    // OCR2B = 128;  //Doesn't matter
+    */
+/*
+  ////////////////////// TIMER 2 INTERUPT ///////////////////////////
+  // OC2A is Pin 11 on a Uno
+  // OC2A is Pin 10 on a Mega
+  TCCR2A = _BV (COM2A0) | _BV(WGM21);  // CTC, toggle OC2A on Compare Match
+  TCCR2B = _BV (CS20);   // No prescaler
+  OCR2A =  209;          // compare A register value (210 * clock speed)
+                        //  = 13.125 nS , so frequency is 1 / (2 * 13.125) = 38095
+
+*/
