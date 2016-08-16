@@ -19,7 +19,7 @@
 
 const byte  ARRAY_LENGTH = 28;
 const byte  IR_TIME_OUT  = 9;
-const byte  FIFO_SIZE    = 20;
+const byte  FIFO_SIZE    = 25;
 
 //#define DEBUG
 //#define DE_BUG_TIMING_PIN   12
@@ -53,12 +53,13 @@ public:
     char        readBeaconType();
     bool        readTagReceivedBeacon();
     byte        readPacketByte();
+    byte        readByteCount();
     String      readPacketName();
     String      readDataType();
     long int    readDataByte();
     uint8_t     readCheckSumRxByte();
     bool        readCheckSumOK();
-
+	int			readCheckSumCalc();			//TODO: debug only - delete it.
 
     void        printBinary(uint16_t number, byte numberOfDigits);
     void        readErrors();
