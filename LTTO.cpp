@@ -8,12 +8,12 @@
 
 LTTO::LTTO()
 {
-
+    // Move along, nothing to see here !
 };
 
 void LTTO::begin(byte txPin, byte rxPin)
 {
-    _txPin = txPin;
+	_txPin = txPin;
     _rxPin = rxPin;
     pinMode (_txPin, OUTPUT);
     pinMode (_rxPin, INPUT_PULLUP);
@@ -36,6 +36,11 @@ void LTTO::begin(byte txPin, byte rxPin)
 
     _fifoPushPointer = 0;
     _fifoPopPointer = 0;
+	for (byte x = 0; x < FIFO_SIZE; x++)
+	{
+		_incomingIRmessageFIFO[_fifoPopPointer].type == ' ';
+	}
+    _messageOverwrittenCount = 0;           //TODO: Did this fix the Overflow on start-up?
 
     ////----------------------------------------------------------------------------------------------
     //    Set Timer0 interrupt
@@ -142,6 +147,12 @@ String LTTO::readDataType()
 long int LTTO::readDataByte()
 {
     return decodedIRmessage.dataByte;
+    //decodedIRmessage.dataByte = 0;
+}
+
+byte    LTTO::readByteCount()
+{
+    return  decodedIRmessage.byteCount;
 }
 
 uint8_t LTTO::readCheckSumRxByte()
@@ -154,6 +165,11 @@ bool LTTO::readCheckSumOK()
     return decodedIRmessage.checkSumOK;
 }
 
+int   LTTO::readCheckSumCalc()
+{
+	return  decodedIRmessage.checkSumCalc;
+}
+
 
 ///---------------------------------------------------------------------------------------------------------
 //    Public : PrintBinary - Prints out any number in Binary, including lead zeros, the size specified.
@@ -163,7 +179,7 @@ void LTTO::printBinary(uint16_t number, byte numberOfDigits)
 {
     uint16_t _number = number;
     byte _numberOfDigits = numberOfDigits;
-    #ifdef DEBUG
+    //#ifdef DEBUG
         int _mask = 0;
         for (byte _n = 1; _n <= _numberOfDigits; _n++)
         {
@@ -189,5 +205,5 @@ void LTTO::printBinary(uint16_t number, byte numberOfDigits)
                 Serial.print(F("_"));
             }
         }
-    #endif
+    //#endif
 }
