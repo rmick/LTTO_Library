@@ -43,10 +43,6 @@ void LTTO::ProcessPacket()
     decodedIRmessage.checkSumOK = false;
     decodedIRmessage.checkSumCalc = decodedIRmessage.packetByte;
 
-    //    decodedIRmessage.gameIDmatch = false;
-    //    decodedIRmessage.taggerID = 0;
-    //    decodedIRmessage.ackPlayerAssignOK = false;
-
     switch (decodedIRmessage.packetByte)
     {
         case ANNOUNCE_CUSTOM_GAME:
