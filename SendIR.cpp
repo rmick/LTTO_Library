@@ -10,13 +10,6 @@ void LTTO::sendIR(char type, uint16_t message)
     int _msgLength = 0;
     int _interDelay = 25;
 
-    #ifdef DEBUG
-        Serial.print(F("\nSending IR- "));
-        Serial.print(type);
-        Serial.print(F(": "));
-        printBinary(message, 8);
-    #endif
-
     //Send Header
     switch (type)
     {
@@ -29,8 +22,7 @@ void LTTO::sendIR(char type, uint16_t message)
     case 'P':
         _msgLength = 9;
         _interDelay = 25;
-        _checkSumCalc = 0;
-        _checkSumCalc = _checkSumCalc + message;
+        _checkSumCalc = message;
         PulseIR(3);
         delayMicroseconds (6000);
         PulseIR(3);
@@ -49,11 +41,12 @@ void LTTO::sendIR(char type, uint16_t message)
         _msgLength = 9;
         _interDelay = 25;
         message = _checkSumCalc;           //Overwrite the message with the calculated checksum
-        PulseIR(3);
+		message = message | 256;          //  Set the required 9th MSB bit to 1 to indicate it is a checksum
+		PulseIR(3);
         delayMicroseconds (6000);
         PulseIR(3);
-        message = message | 256;          //  Set the required 9th MSB bit to 1 to indicate it is a checksum
-        break;
+        
+		break;
 
     case 'T':
         _msgLength = 7;
@@ -80,6 +73,17 @@ void LTTO::sendIR(char type, uint16_t message)
     }
 
     delay(_interDelay);
+
+
+
+	//#ifdef DEBUG
+	Serial.print(F("\nSending IR- "));
+	Serial.print(type);
+	Serial.print(F(": "));
+	printBinary(message, 8);
+	Serial.print(F(" - "));
+	Serial.print(message, HEX);
+	// #endif
 }
 
 
@@ -92,13 +96,16 @@ void LTTO::sendIR(char type, uint16_t message)
 ///---------------------------------------------------------------------------------------------------------
 //    Private : PulseIR
 
+
+//#define TIMER555
+
 void LTTO::PulseIR(byte _mSec)
 {
     unsigned long _pulseStartTime = micros();
     unsigned long _pulseLength = _mSec*1000;
     unsigned long _pulseEndTime = _pulseStartTime + _pulseLength - 24;
 
-    #ifndef TIMER555
+   #ifndef TIMER555
     while (_pulseEndTime >micros() )
     {
         digitalWrite(_txPin, HIGH);
@@ -110,6 +117,7 @@ void LTTO::PulseIR(byte _mSec)
 
     #ifdef TIMER555
          pinMode(_txPin, OUTPUT);
+		 digitalWrite(_txPin, HIGH);		//TODO: Debug for Logic Analyzer
          delayMicroseconds(_pulseLength);
          pinMode(_txPin, INPUT);
     #endif
