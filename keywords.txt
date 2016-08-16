@@ -21,9 +21,14 @@ readPacketByte              KEYWORD2
 readPacketName              KEYWORD2
 readDataType                KEYWORD2
 readDataByte                KEYWORD2
+readByteCount               KEYWORD2
 readCheckSumRxByte          KEYWORD2
 readCheckSumOK              KEYWORD2
 
 printBinary                 KEYWORD2
 readErrorCounts             KEYWORD2
 printIR                     KEYWORD2
+
+PACKET                      KEYWORD2
+DATA                        KEYWORD2
+CHECKSUM                    KEYWORD2
