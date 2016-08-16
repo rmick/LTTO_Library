@@ -153,6 +153,10 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
 
     #ifdef DEBUG
         digitalWrite(DE_BUG_TIMING_PIN, LOW);
+        Serial.print("\nRx: ");
+        Serial.print(_messageIRtype);
+        Serial.print("\t");
+        Serial.print(_messageIRdataPacket);
     #endif
 
 }
@@ -171,10 +175,13 @@ bool LTTO::available()
 {
     if (_messageOverwrittenCount != 0)                           // If there are errors, clear the FIFO to re-sync it
     {
+        //TODO:  
+		Serial.print(F("\nCleaning up the FIFO overflow"));
         for (byte i = 0; i < FIFO_SIZE; i++)
         {
-            _incomingIRmessageFIFO[i].processed = true;
+            _incomingIRmessageFIFO[i].type = ' ';
         }
+        _messageOverwrittenCount = 0;       //TODO: TEMP - This breaks the error count reporting
     }
 
     PopFromFifo();
@@ -206,11 +213,8 @@ void LTTO::printIR(char mode)
         Serial.print(F("\nPrintIR(ext): "));
         for (int i = 0; i<= ARRAY_LENGTH; i++)
         {
-            if (_messageIR[i] != 42)                  //TODO This 'if' statement can go away as we no longer fill the array with 42 as blanks.
-            {
-                Serial.print(_messageIR [i]);
-                Serial.print(F(", "));
-            }
+            Serial.print(_messageIR [i]);
+            Serial.print(F(", "));
         }
     }
 
