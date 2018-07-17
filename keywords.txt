@@ -1,34 +1,34 @@
 
-LTTO                    KEYWORD1
+LTTO	KEYWORD1
 
-sendIR                      KEYWORD2
-sendLTAG                    KEYWORD2
-sendTag                     KEYWORD2
-sendBeacon                  KEYWORD2
-sendZoneBeacon              KEYWORD2
-sendLTARbeacon              KEYWORD2
+sendIR	KEYWORD2
+sendLTAG	KEYWORD2
+sendTag	KEYWORD2
+sendBeacon	KEYWORD2
+sendZoneBeacon	KEYWORD2
+sendLTARbeacon	KEYWORD2
 
-available                   KEYWORD2
-writeClearMessageOverwrittenCount KEYWORD2
-readMessageType             KEYWORD2
-readRawDataPacket           KEYWORD2
-readMessageOverwrittenCount KEYWORD2
-readTeamID                  KEYWORD2
-readPlayerID                KEYWORD2
-readShotStrength            KEYWORD2
-readBeaconType              KEYWORD2
-readPacketByte              KEYWORD2
-readPacketName              KEYWORD2
-readDataType                KEYWORD2
-readDataByte                KEYWORD2
-readByteCount               KEYWORD2
-readCheckSumRxByte          KEYWORD2
-readCheckSumOK              KEYWORD2
+available	KEYWORD2
+writeClearMessageOverwrittenCount	KEYWORD2
+readMessageType	KEYWORD2
+readRawDataPacket	KEYWORD2
+readMessageOverwrittenCount	KEYWORD2
+readTeamID	KEYWORD2
+readPlayerID	KEYWORD2
+readShotStrength	KEYWORD2
+readBeaconType	KEYWORD2
+readPacketByte	KEYWORD2
+readPacketName	KEYWORD2
+readDataType	KEYWORD2
+readDataByte	KEYWORD2
+readByteCount	KEYWORD2
+readCheckSumRxByte	KEYWORD2
+readCheckSumOK	KEYWORD2
 
-printBinary                 KEYWORD2
-readErrorCounts             KEYWORD2
-printIR                     KEYWORD2
+printBinary	KEYWORD2
+readErrorCounts	KEYWORD2
+printIR	KEYWORD2
 
-PACKET                      KEYWORD2
-DATA                        KEYWORD2
-CHECKSUM                    KEYWORD2
+PACKET	KEYWORD2
+DATA	KEYWORD2
+CHECKSUM	KEYWORD2
