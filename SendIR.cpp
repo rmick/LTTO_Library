@@ -77,12 +77,12 @@ void LTTO::sendIR(char type, uint16_t message)
 
 
 	//#ifdef DEBUG
-	Serial.print(F("\nSending IR- "));
-	Serial.print(type);
-	Serial.print(F(": "));
-	printBinary(message, 8);
-	Serial.print(F(" - "));
-	Serial.print(message, HEX);
+//	Serial.print(F("\nSending IR- "));
+//	Serial.print(type);
+//	Serial.print(F(": "));
+//	printBinary(message, 8);
+//	Serial.print(F(" - "));
+//	Serial.print(message, HEX);
 	// #endif
 }
 

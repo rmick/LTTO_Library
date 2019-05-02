@@ -85,6 +85,7 @@ private:
     void PulseIR(byte mSec);
     void ProcessTag();
     void ProcessBeacon();
+    void ProcessLtarBeacon();
     void ProcessPacket();
     void ProcessDataByte();
     void ProcessCheckSum();
@@ -121,6 +122,8 @@ private:
         byte                    shotStrength;             //  Mega = 1 thru 4
         char                    beaconType;               //  '0' = IFF, '1' = TagReceived, 'Z' = ZONE,
         bool                    tagReceivedBeacon;        //  true = Beacon sent due to Tagger being tagged (confirmation)
+        bool                    shieldsActiveBeacon;      //  true = Shields are reported On via Ltar Enhanced Beacon
+        byte                    tagsRemainingBeacon;      //  % of lives remaining on 
         byte                    packetByte;               //  The undecoded Packet number in Hex
         String                  packetName;               //  The simple name for the packet (e.g. Announce Game)  - source   wiki.lazerswarm.com
         String                  dataType;                 //  What the current DataByte contains (e.g. GameID, TaggerID, ShieldTime, PackedByte1, etc)

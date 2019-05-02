@@ -36,6 +36,23 @@ void LTTO::ProcessBeacon()
     else if (decodedIRmessage.tagReceivedBeacon == 0 && decodedIRmessage.shotStrength == 4) decodedIRmessage.beaconType = SUPPLY_ZONE;
 }
 
+void LTTO::ProcessLtarBeacon()
+{
+    Serial.print("Ltar Enhanced Beacon Rx");
+//    decodedIRmessage.tagReceivedBeacon      = (decodedIRmessage.rawDataPacket & B100000000);   // Sets flag for whether the beacon was sent because of receiving a tag
+//    decodedIRmessage.shieldsActiveBeacon    = (decodedIRmessage.rawDataPacket & B010000000);   // Sets bit to show if Shields are active on the tagger that sent the beacon
+//    decodedIRmessage.tagsRemainingBeacon    = (decodedIRmessage.rawDataPacket & B001100000);   // Returns Int 1-4, which is 0/1-25/26/50/51-100
+//    
+//    // Find TeamID of tagger
+//    decodedIRmessage.teamID     = (decodedIRmessage.rawDataPacket & B000011000);               // TeamID = 1 thru 3  (0 = NoTeams)
+//    decodedIRmessage.teamID     = decodedIRmessage.teamID >> 3;
+//    // Find PlayerID
+//    decodedIRmessage.playerID   = (decodedIRmessage.rawDataPacket & B000000111);               // PlayerID = 1 thru 8
+//    decodedIRmessage.playerID   = (decodedIRmessage.playerID + 1);
+}
+
+
+
 void LTTO::ProcessPacket()
 {
     decodedIRmessage.byteCount = 0;

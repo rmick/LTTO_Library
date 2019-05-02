@@ -4,10 +4,11 @@
 
 #define     TAG             'T'
 #define     BEACON          'B'
+#define     LTAR_BEACON     'L'
 #define     PACKET          'P'
 #define     DATA            'D'
 #define     CHECKSUM        'C'
-#define     BAD_MESSAGE     'X'
+#define     BAD_MESSAGE     'x'
 #define     SHORT_PACKET    's'
 #define     INVALID_TYPE    't'
 #define     NON_36_HEADER   'h'

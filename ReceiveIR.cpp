@@ -117,6 +117,7 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     else if (irPacketLength > 18 && _messageIR[3] == 3 && irPacketLength < 21)  _messageIRtype = 'D';          // Data
     else if (irPacketLength > 16 && _messageIR[3] == 3 && irPacketLength < 19)  _messageIRtype = 'T';          // Tag
     else if (irPacketLength > 12 && _messageIR[3] == 6 && irPacketLength < 15)  _messageIRtype = 'B';          // Beacon - only beacons have 3/6/6 header !!
+    else if (irPacketLength > 20 && _messageIR[3] == 6 && irPacketLength < 30)  _messageIRtype = 'L';          // Ltar Enhanced Beacon
     else
     {
         _messageIRtype = INVALID_TYPE;
@@ -133,10 +134,11 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     byte _messageLength = 0;
     if      (_messageIRtype == 'T') _messageLength = 17;           // Long Break [0] + 3 header [1,2,3] + break [4] + 7 bits,breaks [5,7,9,11,13,15,17]
     else if (_messageIRtype == 'B') _messageLength = 13;           // Long Break [0] + 3 header [1,2,3] + break [4] + 5 bits,breaks [5,7,9,11,13]
+    else if (_messageIRtype == 'L') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
     else if (_messageIRtype == 'P') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
     else if (_messageIRtype == 'D') _messageLength = 19;           // Long Break [0] + 3 header [1,2,3] + break [4] + 8 bits,breaks [5,7,9,11,13,15,17,19]
     else if (_messageIRtype == 'C') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
-
+    
     ////---------------------------------------------------------------------------------------------------------
     //  Push the data into the dataPacket
 
@@ -190,10 +192,11 @@ bool LTTO::available()
 
     if      (decodedIRmessage.type == TAG)      ProcessTag();
     //TODO: Check for a bad 3/6 Tag packet and then flag as a near miss !!
-    else if (decodedIRmessage.type == BEACON)   ProcessBeacon();
-    else if (decodedIRmessage.type == PACKET)   ProcessPacket();
-    else if (decodedIRmessage.type == DATA)     ProcessDataByte();
-    else if (decodedIRmessage.type == CHECKSUM) ProcessCheckSum();
+    else if (decodedIRmessage.type == BEACON)       ProcessBeacon();
+    else if (decodedIRmessage.type == LTAR_BEACON)  ProcessLtarBeacon();
+    else if (decodedIRmessage.type == PACKET)       ProcessPacket();
+    else if (decodedIRmessage.type == DATA)         ProcessDataByte();
+    else if (decodedIRmessage.type == CHECKSUM)     ProcessCheckSum();
     else if (decodedIRmessage.type == SHORT_PACKET)   { _badMessage_CountISRshortPacket++;   decodedIRmessage.type = BAD_MESSAGE; }
     else if (decodedIRmessage.type == INVALID_TYPE)   { _badMessage_InvalidPacketType++;     decodedIRmessage.type = BAD_MESSAGE; }
     else if (decodedIRmessage.type == NON_36_HEADER)  { _badMessage_non3_6Header++;          decodedIRmessage.type = BAD_MESSAGE; }
