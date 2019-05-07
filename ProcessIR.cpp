@@ -39,16 +39,26 @@ void LTTO::ProcessBeacon()
 void LTTO::ProcessLtarBeacon()
 {
     Serial.print("Ltar Enhanced Beacon Rx");
-//    decodedIRmessage.tagReceivedBeacon      = (decodedIRmessage.rawDataPacket & B100000000);   // Sets flag for whether the beacon was sent because of receiving a tag
-//    decodedIRmessage.shieldsActiveBeacon    = (decodedIRmessage.rawDataPacket & B010000000);   // Sets bit to show if Shields are active on the tagger that sent the beacon
-//    decodedIRmessage.tagsRemainingBeacon    = (decodedIRmessage.rawDataPacket & B001100000);   // Returns Int 1-4, which is 0/1-25/26/50/51-100
-//    
-//    // Find TeamID of tagger
-//    decodedIRmessage.teamID     = (decodedIRmessage.rawDataPacket & B000011000);               // TeamID = 1 thru 3  (0 = NoTeams)
-//    decodedIRmessage.teamID     = decodedIRmessage.teamID >> 3;
-//    // Find PlayerID
-//    decodedIRmessage.playerID   = (decodedIRmessage.rawDataPacket & B000000111);               // PlayerID = 1 thru 8
-//    decodedIRmessage.playerID   = (decodedIRmessage.playerID + 1);
+    // Decode if HitResponse Beacon
+    decodedIRmessage.tagReceivedBeacon      = (decodedIRmessage.rawDataPacket >> 8);          // Sets flag for whether the beacon was sent because of receiving a tag
+    //Decode ShieldsActive state
+    decodedIRmessage.shieldsActiveBeacon    = (decodedIRmessage.rawDataPacket & B10000000);   // Sets bit to show if Shields are active on the tagger that sent the beacon
+    decodedIRmessage.tagsRemainingBeacon    = (decodedIRmessage.rawDataPacket & B01100000);   // Returns Int 0-3, which is 0/1-25/26/50/51-100
+    
+    // Find TeamID of tagger
+    decodedIRmessage.teamID     = (decodedIRmessage.rawDataPacket & B00011000);               // TeamID = 1 thru 3  (0 = NoTeams)
+    decodedIRmessage.teamID     = decodedIRmessage.teamID >> 3;
+    // Find PlayerID
+    decodedIRmessage.playerID   = (decodedIRmessage.rawDataPacket & B00000111);               // PlayerID = 1 thru 8
+    decodedIRmessage.playerID   = (decodedIRmessage.playerID + 1);
+
+    if      (decodedIRmessage.tagReceivedBeacon == 1)   decodedIRmessage.beaconType = LTAR_HIT_RESPONSE_BEACON;
+    else if (decodedIRmessage.tagReceivedBeacon == 0)   decodedIRmessage.beaconType = LTAR_IFF_BEACON;
+
+    //Change tagsRemaining from 1-4 to 0/25/50/100
+    if      (decodedIRmessage.tagsRemainingBeacon <= 2) decodedIRmessage.tagsRemainingBeacon * 25;
+    else if (decodedIRmessage.tagsRemainingBeacon  = 3) decodedIRmessage.tagsRemainingBeacon = 100;
+    
 }
 
 
