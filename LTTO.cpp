@@ -125,10 +125,21 @@ char LTTO::readBeaconType()
     return decodedIRmessage.beaconType;
 }
 
+bool LTTO::readShieldsActivebeacon()
+{
+    return decodedIRmessage.shieldsActiveBeacon;
+}
+
+int LTTO::readTagsRemainingBeacon()
+{
+    return decodedIRmessage.tagsRemainingBeacon;
+}
+
 bool LTTO::readTagReceivedBeacon()
 {
     return decodedIRmessage.tagReceivedBeacon;
 }
+
 byte LTTO::readPacketByte()
 {
     return decodedIRmessage.packetByte;

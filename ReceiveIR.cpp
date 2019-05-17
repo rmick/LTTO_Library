@@ -112,12 +112,12 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     ////---------------------------------------------------------------------------------------------------------
     //  Set the message type via the number of bits received (and 1/9th bit of Packet/Checksum)
 
-    if      (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 0)   _messageIRtype = 'P';          // Packet
-    else if (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 1)   _messageIRtype = 'C';          // Checksum
-    else if (irPacketLength > 18 && _messageIR[3] == 3 && irPacketLength < 21)  _messageIRtype = 'D';          // Data
-    else if (irPacketLength > 16 && _messageIR[3] == 3 && irPacketLength < 19)  _messageIRtype = 'T';          // Tag
-    else if (irPacketLength > 12 && _messageIR[3] == 6 && irPacketLength < 15)  _messageIRtype = 'B';          // Beacon - only beacons have 3/6/6 header !!
-    else if (irPacketLength > 20 && _messageIR[3] == 6 && irPacketLength < 30)  _messageIRtype = 'L';          // Ltar Enhanced Beacon
+    if      (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 0)   _messageIRtype = PACKET;
+    else if (irPacketLength > 20 && _messageIR[3] == 3 && _messageIR[5] == 1)   _messageIRtype = CHECKSUM;
+    else if (irPacketLength > 18 && _messageIR[3] == 3 && irPacketLength < 21)  _messageIRtype = DATA;
+    else if (irPacketLength > 16 && _messageIR[3] == 3 && irPacketLength < 19)  _messageIRtype = TAG;
+    else if (irPacketLength > 12 && _messageIR[3] == 6 && irPacketLength < 15)  _messageIRtype = BEACON;          //  only beacons have 3/6/6 header !!
+    else if (irPacketLength > 20 && _messageIR[3] == 6 && irPacketLength < 30)  _messageIRtype = LTAR_BEACON;     //  Ltar Enhanced Beacon
     else
     {
         _messageIRtype = INVALID_TYPE;
@@ -132,12 +132,12 @@ void LTTO::CreateIRmessage()                              //  TODO: Currently no
     // Set the message length based on the type
 
     byte _messageLength = 0;
-    if      (_messageIRtype == 'T') _messageLength = 17;           // Long Break [0] + 3 header [1,2,3] + break [4] + 7 bits,breaks [5,7,9,11,13,15,17]
-    else if (_messageIRtype == 'B') _messageLength = 13;           // Long Break [0] + 3 header [1,2,3] + break [4] + 5 bits,breaks [5,7,9,11,13]
-    else if (_messageIRtype == 'L') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
-    else if (_messageIRtype == 'P') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
-    else if (_messageIRtype == 'D') _messageLength = 19;           // Long Break [0] + 3 header [1,2,3] + break [4] + 8 bits,breaks [5,7,9,11,13,15,17,19]
-    else if (_messageIRtype == 'C') _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
+    if      (_messageIRtype == TAG)         _messageLength = 17;           // Long Break [0] + 3 header [1,2,3] + break [4] + 7 bits,breaks [5,7,9,11,13,15,17]
+    else if (_messageIRtype == BEACON)      _messageLength = 13;           // Long Break [0] + 3 header [1,2,3] + break [4] + 5 bits,breaks [5,7,9,11,13]
+    else if (_messageIRtype == LTAR_BEACON) _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
+    else if (_messageIRtype == PACKET)      _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
+    else if (_messageIRtype == DATA)        _messageLength = 19;           // Long Break [0] + 3 header [1,2,3] + break [4] + 8 bits,breaks [5,7,9,11,13,15,17,19]
+    else if (_messageIRtype == CHECKSUM)    _messageLength = 21;           // Long Break [0] + 3 header [1,2,3] + break [4] + 9 bits,breaks [5,7,9,11,13,15,17,19,21]
     
     ////---------------------------------------------------------------------------------------------------------
     //  Push the data into the dataPacket

@@ -52,6 +52,8 @@ public:
     byte        readShotStrength();
     char        readBeaconType();
     bool        readTagReceivedBeacon();
+    bool        readShieldsActivebeacon();
+    int         readTagsRemainingBeacon();
     byte        readPacketByte();
     byte        readByteCount();
     String      readPacketName();

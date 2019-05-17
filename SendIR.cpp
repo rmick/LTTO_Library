@@ -13,13 +13,13 @@ void LTTO::sendIR(char type, uint16_t message)
     //Send Header
     switch (type)
     {
-    // if Type = B then Beacon,   Header is 366, length is 5 bits
-    // if Type = T then Tag,      Header is 363, length is 7 bits
-    // if Type = D the data byte, Header is 363, length is 8 bits
-    // if Type = P then Packet,   Header is 363, length is 9 bits, first bit must be 0
-    // if Type = C then CheckSum, Header is 363, length is 9 bits, first bit must be 1
+    // if Type = BEACON       Header is 366, length is 5 bits
+    // if Type = TAG          Header is 363, length is 7 bits
+    // if Type = DATA         Header is 363, length is 8 bits
+    // if Type = PACKET       Header is 363, length is 9 bits, first bit must be 0
+    // if Type = CHECKSUM     Header is 363, length is 9 bits, first bit must be 1
 
-    case 'P':
+    case PACKET:
         _msgLength = 9;
         _interDelay = 25;
         _checkSumCalc = message;
@@ -28,7 +28,7 @@ void LTTO::sendIR(char type, uint16_t message)
         PulseIR(3);
         break;
 
-    case 'D':
+    case DATA:
         _msgLength = 8;
         _interDelay = 25;
         _checkSumCalc = _checkSumCalc + message;
@@ -37,18 +37,17 @@ void LTTO::sendIR(char type, uint16_t message)
         PulseIR(3);
         break;
 
-    case 'C':
+    case CHECKSUM:
         _msgLength = 9;
         _interDelay = 25;
-        message = _checkSumCalc;           //Overwrite the message with the calculated checksum
-		message = message | 256;          //  Set the required 9th MSB bit to 1 to indicate it is a checksum
-		PulseIR(3);
+        message = _checkSumCalc;           // Overwrite the message with the calculated checksum
+		    message = message | 256;          //  Set the required 9th MSB bit to 1 to indicate it is a checksum
+		    PulseIR(3);
         delayMicroseconds (6000);
         PulseIR(3);
-        
-		break;
+        break;
 
-    case 'T':
+    case TAG:
         _msgLength = 7;
         _interDelay = 5;
         PulseIR(3);
@@ -56,13 +55,22 @@ void LTTO::sendIR(char type, uint16_t message)
         PulseIR(3);
         break;
 
-    case 'B':
+    case BEACON:
         _msgLength = 5;
         _interDelay = 25;
         PulseIR(3);
         delayMicroseconds (6000);
         PulseIR(6);
         break;
+
+    case LTAR_BEACON:
+    TO BE DONE  
+        _msgLength = ???
+        _interDelay = 25;
+        PulseIR(3);
+        delayMicroseconds (6000);
+        PulseIR(6);
+        break;  
     }
 
     //Send message
@@ -156,7 +164,7 @@ bool LTTO::sendTag(byte teamID, byte playerID, byte tagPower)
                             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///---------------------------------------------------------------------------------------------------------
-//    Public : SendTag - Send a tag in a hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
+//    Public : SendTag - Send a tag in a non-hosted game. This takes the simple data, translates it into Binary and sends it using the SendIR class
 
 bool LTTO::sendLTAG(byte tagPower)
 {
@@ -243,7 +251,7 @@ bool LTTO::sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaini
     _beaconMessage = _beaconMessage << 2;
     _beaconMessage = _beaconMessage + teamID;
 
-    this->sendIR( BEACON, _beaconMessage);
+    this->sendIR( LTAR_BEACON, _beaconMessage);
     return true;
 }
 

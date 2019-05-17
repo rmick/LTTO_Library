@@ -2,12 +2,12 @@
 ////---------------------------------------------------------------------------------------------------------
 //    SendIR stuff
 
-#define     TAG             'T'
-#define     BEACON          'B'
-#define     LTAR_BEACON     'L'
-#define     PACKET          'P'
-#define     DATA            'D'
-#define     CHECKSUM        'C'
+#define     TAG             'h'
+#define     BEACON          'i'
+#define     LTAR_BEACON     'j'
+#define     PACKET          'k'
+#define     DATA            'l'
+#define     CHECKSUM        'm'
 #define     BAD_MESSAGE     'x'
 #define     SHORT_PACKET    's'
 #define     INVALID_TYPE    't'
