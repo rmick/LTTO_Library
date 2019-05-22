@@ -125,7 +125,7 @@ char LTTO::readBeaconType()
     return decodedIRmessage.beaconType;
 }
 
-bool LTTO::readShieldsActivebeacon()
+bool LTTO::readShieldsActiveBeacon()
 {
     return decodedIRmessage.shieldsActiveBeacon;
 }

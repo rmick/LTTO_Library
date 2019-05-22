@@ -1,7 +1,7 @@
 
 ///---------------------------------------------------------------------------------------------------------
 //    LTTO set up
-#define DEBUG
+#define DEBUG 1
 #define EI_ARDUINO_INTERRUPTED_PIN                      //  This tells the ISR routine which was the last Pin that changed
 #include <EnableInterrupt.h>                            //  This is required for the LTTO libary to work.  https://github.com/GreyGnome/EnableInterrupt
 #include <LTTO.h>                                       //  This adds the LTTO library to the sketch
@@ -15,7 +15,7 @@ void setup()
     Serial.begin(115200);                               //  Starts the Serial port for debugging
     Serial.println(F("\nHere we go boys....."));        //  A short message so that we know something is happenning
     ltto.begin(13,11);                                  //  Start the ltto IR comms , using Pin 13 to Tx and Pin 11 to Rx.
-}                                                       //  N.B. - You can use ANY pins on the Arduino, not just 13 and 11.
+}                                                        //  N.B. - You can use ANY pins on the Arduino, not just 13 and 11.
 
 
 void loop()
@@ -68,10 +68,43 @@ void loop()
                     {
                         Serial.print(F("TeamID #: "));                  // If teamID is 1,2 or 3 - then the supply base only works for that team
                         Serial.print(ltto.readTeamID() );
-                    }
+                    }    
                 }
             break;
 
+            case LTAR_BEACON:
+                if      (ltto.readBeaconType() == LTAR_HIT_RESPONSE_BEACON)
+                {
+                    Serial.print(F("\n\t    Ltar Hit Response Beacon - "));
+                }
+                else if (ltto.readBeaconType() == LTAR_IFF_BEACON)
+                {
+                    Serial.print(F("\n\t    Ltar IFF Beacon - "));
+                }
+                Serial.print(F("\tShields Active: "));
+                Serial.print(ltto.readShieldsActiveBeacon() );
+                if      (ltto.readTagsRemainingBeacon() == 0)
+                {
+                  Serial.print(F("\tTags Remaining: Zero"));
+                }
+                else if (ltto.readTagsRemainingBeacon() == 25)
+                {
+                  Serial.print(F("\tTags Remaining: 1 - 25 %"));
+                }
+                else if (ltto.readTagsRemainingBeacon() == 50)
+                {
+                  Serial.print(F("\tTags Remaining: 26 - 50 %"));
+                }
+                else if (ltto.readTagsRemainingBeacon() == 100)
+                {
+                  Serial.print(F("\tTags Remaining: 51 - 100 %"));
+                }
+                Serial.print(F("\tTeamID #: "));
+                Serial.print(ltto.readTeamID() );
+                Serial.print(F("\tPlayer #: "));
+                Serial.print(ltto.readPlayerID() );
+            break;
+            
             case PACKET:                                                // A Packet byte a Header that announces what follows. Used to Host Games and send special messages
                 Serial.print(F("\n\t\t------------------"));
                 Serial.print(F("\n\t\tPacket1 - 0x"));

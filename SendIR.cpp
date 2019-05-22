@@ -64,8 +64,7 @@ void LTTO::sendIR(char type, uint16_t message)
         break;
 
     case LTAR_BEACON:
-    TO BE DONE  
-        _msgLength = ???
+        _msgLength = 9;
         _interDelay = 25;
         PulseIR(3);
         delayMicroseconds (6000);

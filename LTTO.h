@@ -13,7 +13,6 @@
 #include <EnableInterrupt.h>
 
 
-
 ////---------------------------------------------------------------------------------------------------------
 //    Declare Global Variables
 
@@ -52,7 +51,7 @@ public:
     byte        readShotStrength();
     char        readBeaconType();
     bool        readTagReceivedBeacon();
-    bool        readShieldsActivebeacon();
+    bool        readShieldsActiveBeacon();
     int         readTagsRemainingBeacon();
     byte        readPacketByte();
     byte        readByteCount();

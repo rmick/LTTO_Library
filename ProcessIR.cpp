@@ -38,7 +38,6 @@ void LTTO::ProcessBeacon()
 
 void LTTO::ProcessLtarBeacon()
 {
-    Serial.print("Ltar Enhanced Beacon Rx");
     // Decode if HitResponse Beacon
     decodedIRmessage.tagReceivedBeacon      = (decodedIRmessage.rawDataPacket >> 8);          // Sets flag for whether the beacon was sent because of receiving a tag
     //Decode ShieldsActive state
@@ -56,9 +55,21 @@ void LTTO::ProcessLtarBeacon()
     else if (decodedIRmessage.tagReceivedBeacon == 0)   decodedIRmessage.beaconType = LTAR_IFF_BEACON;
 
     //Change tagsRemaining from 1-4 to 0/25/50/100
-    if      (decodedIRmessage.tagsRemainingBeacon <= 2) decodedIRmessage.tagsRemainingBeacon * 25;
-    else if (decodedIRmessage.tagsRemainingBeacon  = 3) decodedIRmessage.tagsRemainingBeacon = 100;
-    
+    switch (decodedIRmessage.tagsRemainingBeacon)
+    {
+        case 96:
+            decodedIRmessage.tagsRemainingBeacon = 100;
+            break;
+        case 64:
+            decodedIRmessage.tagsRemainingBeacon = 50;
+            break;
+        case 32:
+            decodedIRmessage.tagsRemainingBeacon = 25;
+            break;
+        case 0:
+            decodedIRmessage.tagsRemainingBeacon = 0;
+            break;
+    }
 }
 
 
