@@ -16,11 +16,11 @@
 ////---------------------------------------------------------------------------------------------------------
 //    Beacon Stuff
 
-#define     IFF_BEACON                  'a'
-#define     HIT_RESPONSE_BEACON         'b'
-#define     SUPPLY_ZONE                 'c'
-#define     CONTESTED_ZONE              'd'
-#define     ZONE_BEACON                 'e'
+#define     IFF_BEACON                  '0'
+#define     HIT_RESPONSE_BEACON         '1'
+#define     SUPPLY_ZONE                 '3'
+#define     CONTESTED_ZONE              '2'
+#define     ZONE_BEACON                 'Z'
 #define     LTAR_IFF_BEACON             'f'
 #define     LTAR_HIT_RESPONSE_BEACON    'g'
 
