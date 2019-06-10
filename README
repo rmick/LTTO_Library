@@ -45,7 +45,7 @@ You must install the LTTO library as well as the EnableInterrupt library (https:
 4)  SendTextMessage sends the text 'HELLO' to any gun in range.
     Use the Digital/Button example circuit - just replace the normal LED with an IR LED.
     It is a good way to start learning how to send IR messages.
-    Visit wiki.lazerswarm for details on the protocol
+    Visit wiki.lazerswarm.com for details on the protocol
 
 5)  ReceiveTag sends a message with the details of the tag received to the Arduino Serial Monitor.
     Connect the IR receiver as per the circuit above, and set the Serial Monitor speed to 115200 baud.
@@ -62,6 +62,7 @@ LIST OF METHODS:
         bool        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
         bool        sendZoneBeacon(byte zoneType, byte teamID);
         bool        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
+        void        clearIRmessage();
 
         bool        available();
         void        clearMessageOverwrittenCount();
