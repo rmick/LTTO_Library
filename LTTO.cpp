@@ -181,6 +181,12 @@ int   LTTO::readCheckSumCalc()
 	return  decodedIRmessage.checkSumCalc;
 }
 
+void  LTTO::clearIRmessage()
+{
+    decodedIRmessage.newMessage     = false;
+    decodedIRmessage.type           = NO_MESSAGE;
+    decodedIRmessage.rawDataPacket  = 0;
+}
 
 ///---------------------------------------------------------------------------------------------------------
 //    Public : PrintBinary - Prints out any number in Binary, including lead zeros, the size specified.

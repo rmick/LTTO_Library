@@ -40,6 +40,7 @@ public:
     bool        sendBeacon(bool tagReceived, byte teamID, byte tagPower);
     bool        sendZoneBeacon(byte zoneType, byte teamID);
     bool        sendLTARbeacon(bool tagReceived, bool shieldsActive, byte tagsRemaining, byte unKnown, byte teamID);
+    void        clearIRmessage();
 
     bool        available();
     void        clearMessageOverwrittenCount();
