@@ -10,11 +10,26 @@ void LTTO::ProcessTag()
     // Find TeamID of tagger
     decodedIRmessage.teamID = (decodedIRmessage.rawDataPacket & B01100000);             // TeamID = 1 thru 3  (0 = NoTeams)
     decodedIRmessage.teamID = decodedIRmessage.teamID >> 5;
-    // Find PlayerID
-    decodedIRmessage.playerID = (decodedIRmessage.rawDataPacket & B00011100);         // PlayerID = 1 thru 8
-    decodedIRmessage.playerID = (decodedIRmessage.playerID >> 2) + 1;
+    
+    if (decodedIRmessage.teamID == 0)                                                   // It is a Grab&Go game.
+    {
+        if ((decodedIRmessage.rawDataPacket & B00010000) == 1)                          // The tag is a Hostile Zone Tag
+        
+        
+        
+        decodedIRmessage.isGrabAndGoGame = true;
+        decodedIRmessage.teamID = (decodedIRmessage.rawDataPacket & B00011100);         //PlayerID becomes TeamID in Grab&Go games
+        decodedIRmessage.teamID = (decodedIRmessage.teamID >> 2);
+        decodedIRmessage.player = 0;
+    }
+    else
+    {
+        // Find PlayerID
+        decodedIRmessage.playerID = (decodedIRmessage.rawDataPacket & B00011100);       // PlayerID = 1 thru 8
+        decodedIRmessage.playerID = (decodedIRmessage.playerID >> 2) + 1;
+    }
     // Find tag Power
-    decodedIRmessage.shotStrength = (decodedIRmessage.rawDataPacket & B00000011)+1;   // Tag strength = 1 to 4
+    decodedIRmessage.shotStrength = (decodedIRmessage.rawDataPacket & B00000011)+1;     // Tag strength = 1 to 4
 }
 
 void LTTO::ProcessBeacon()
