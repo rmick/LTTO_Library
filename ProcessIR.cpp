@@ -14,13 +14,13 @@ void LTTO::ProcessTag()
     if (decodedIRmessage.teamID == 0)                                                   // It is a Grab&Go game.
     {
         if ((decodedIRmessage.rawDataPacket & B00010000) == 1)                          // The tag is a Hostile Zone Tag
-        
-        
-        
+        {
+            //TODO
+        }
         decodedIRmessage.isGrabAndGoGame = true;
         decodedIRmessage.teamID = (decodedIRmessage.rawDataPacket & B00011100);         //PlayerID becomes TeamID in Grab&Go games
         decodedIRmessage.teamID = (decodedIRmessage.teamID >> 2);
-        decodedIRmessage.player = 0;
+        decodedIRmessage.playerID = 0;
     }
     else
     {
