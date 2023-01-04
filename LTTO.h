@@ -122,8 +122,8 @@ private:
         byte                    teamID;                   //  Team 0 = No Team, then 1,2,3
         byte                    playerID;                 //  Player 1 thru 8
         byte                    shotStrength;             //  Mega = 1 thru 4
-        bool                    isGrabAndGoGame           //  Grab&Go games use a different TeamID structure and no playerID
-        bool                    isHostileZone             //  Hostile Zones send tags but are not players
+        bool                    isGrabAndGoGame;           //  Grab&Go games use a different TeamID structure and no playerID
+        bool                    isHostileZone;             //  Hostile Zones send tags but are not players
         char                    beaconType;               //  'a' = IFF, 'b' = TagReceived, 'e' = ZONE,
         bool                    tagReceivedBeacon;        //  true = Beacon sent due to Tagger being tagged (confirmation)
         bool                    shieldsActiveBeacon;      //  true = Shields are reported On via Ltar Enhanced Beacon
